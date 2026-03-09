@@ -1,0 +1,175 @@
+/* src/assets/main.css */
+
+/* 1. 字体引入 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+/* 2. 基础重置 (Reset) */
+body {
+    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f9fc;
+    color: #334155;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 3. 布局容器 */
+main {
+    padding-top: 0;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 20px 40px;
+    min-height: calc(100vh - 350px);
+}
+
+/* ==================== 4. 霓虹能量滚动条 (美化重点) ==================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #003a7a, #0088cc);
+    border-radius: 10px;
+    border: 2px solid #f7f9fc; /* 增加悬浮感 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #ff6f00, #ffca28); /* 悬停变橙色发光 */
+}
+
+/* ==================== 5. 通用动画与辅助类 ==================== */
+.fade-in-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.is-visible { opacity: 1; transform: translateY(0); }
+
+.z-index-content { position: relative; z-index: 5; }
+a { transition: all 0.3s ease; text-decoration: none; color: inherit; }
+::selection { background: #003a7a; color: #fff; }
+
+/* ==================== 6：新闻详情页特定样式 ==================== */
+
+.article-details-box {
+    background-color: #f9f9f9; 
+    border-left: 5px solid #007bff; 
+    padding: 20px 25px; 
+    margin: 30px 0; 
+    border-radius: 5px;
+}
+.article-details-box h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.4em;
+    border-bottom: none; /* 防止被通用样式影响 */
+}
+.article-details-box ul {
+    list-style-type: none; 
+    padding-left: 0;
+    margin: 0;
+}
+.article-details-box li {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    font-size: 1.05em;
+    color: #444;
+}
+/* 图标颜色 */
+.article-details-box li i {
+    margin-right: 12px; 
+    color: #007bff;
+    width: 20px; 
+    text-align: center;
+}
+
+/* 2. 授课内容卡片 (两列布局) */
+.website-benefits {
+    margin-top: 40px;
+}
+.website-benefits h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.5em;
+    color: #003a7a;
+}
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+.benefit-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    transition: transform 0.3s ease;
+    text-align: center; /* 让卡片内容居中 */
+}
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,58,122,0.1);
+}
+.benefit-card h4 {
+    margin: 15px 0 10px;
+    font-size: 1.2em;
+    color: #333;
+}
+.benefit-card p {
+    font-size: 0.95em;
+    color: #666;
+    line-height: 1.6;
+}
+.card-icon {
+    font-size: 2em;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+/* 3. 课前准备 (列表样式) */
+.prerequisites {
+    margin-top: 40px;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+.prerequisites h3 {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+.prerequisites ul {
+    padding-left: 20px;
+    line-height: 1.8;
+}
+.prerequisites li {
+    margin-bottom: 8px;
+}
+.prerequisites a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+/* 4. 底部结语 */
+.conclusion {
+    margin-top: 40px; 
+    border-top: 1px dashed #ddd; 
+    padding-top: 30px; 
+    text-align: center; 
+    font-size: 1.2em;
+    color: #555;
+}
+.conclusion p strong {
+    color: #ff6f00;
+    font-size: 1.3em;
+}
