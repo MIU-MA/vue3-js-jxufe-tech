@@ -3,15 +3,7 @@ import { onMounted, ref } from 'vue';
 
 // 1. 成员数据列表 (根据您提供的 members.html 实时更新)
 const members = ref([
-  { name: "郭梓萌", role: "大数据241", badge: "团支书", bio: "协会苦力1", img: "/images/gzm.jpg" },
-  { name: "倪立煌", role: "信计241", badge: "学习部部长", bio: "协会苦力2", img: "/images/nlh.jpg" },
-  { name: "姚佳欣", role: "量化241", badge: "组织部部长", bio: "演辩协驻数智协会成员之一，专攻辩论数智化分析方向", img: "/images/yjx.jpg" },
-  { name: "王柯迪", role: "信管241", badge: "宣传部部长", bio: "吃干饭的", img: "/images/wkd.jpg" },
-  { name: "吴松烨", role: "信管221", badge: "摄政王", bio: "保研至西安电子科技大学计算机科学与技术专业，2025蓝桥杯省一，国家奖学金", img: "/images/wsy.jpg" },
-  { name: "杨镇宁", role: "大数据241", badge: "技术先锋", bio: "蓝桥杯省二，睿抗国三", img: "/images/yzn.jpg" },
-  { name: "赵博", role: "信计241", badge: "学习部成员", bio: "加权王，蓝桥杯省二，华数杯国三", img: "/images/zb.jpg" },
-  { name: "李怡霏", role: "信计241", badge: "学习部成员", bio: "院学习部部长", img: "/images/lyf.jpg" },
-  { name: "叶恒远", role: "计算机拔尖班", badge: "学习部成员", bio: "睿抗国一，蓝桥杯省三", img: "/images/yhy.jpg" }
+ 
 ]);
 
 // 2. 滚动渐入动画初始化

@@ -14,7 +14,7 @@
         
         <div class="member-card">
           <img src="/images/jt.jpg" alt="jt照片" class="member-photo"> 
-          <h3>蒋滔</h3>
+          <h3>MIUMA</h3>
           <span class="member-role">大数据241</span>
           <p class="member-bio">睡觉大王</p>
         </div>
