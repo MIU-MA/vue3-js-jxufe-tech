@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router' // 引入我们创建的路由配置
+import router from './router'
 import './assets/main.css'    // 引入全局样式
 
 const app = createApp(App)

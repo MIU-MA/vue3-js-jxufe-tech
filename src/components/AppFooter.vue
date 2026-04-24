@@ -25,9 +25,8 @@ const friendLinks = ref([
     }
 ]);
 
-// 定义联系方式 (您可以修改为真实的邮箱)
 const contactInfo = {
-  email: "2117410945@qq.com", // 示例邮箱
+  email: "2117410945@qq.com",
   address: "江西省南昌市昌北经济技术开发区双港东大街169号",
   school: "信息管理与数学学院"
 };

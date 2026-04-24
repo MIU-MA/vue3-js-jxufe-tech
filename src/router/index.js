@@ -22,7 +22,6 @@ const router = createRouter({
       return {
         el: to.hash,
         behavior: 'smooth',
-        // 修正：预留顶部导航栏高度 60px
         top: 60, 
       }
     }

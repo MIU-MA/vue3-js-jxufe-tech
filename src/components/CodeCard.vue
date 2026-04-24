@@ -8,7 +8,7 @@ defineProps({
     type: String,
     default: ''
   },
-  language: { // 可选：用于显示不同的圆点颜色组合或其他逻辑，目前暂时只用通用样式
+  language: {
     type: String,
     default: 'css'
   }
@@ -41,8 +41,8 @@ defineProps({
 
 <style scoped>
 .card {
-  width: 260px;  /* 稍微改小一点默认宽度 */
-  height: 320px; /* 稍微改小一点默认高度 */
+  width: 260px;
+  height: 320px;
   background-color: #24233b;
   border-radius: 8px;
   z-index: 1;
@@ -54,9 +54,9 @@ defineProps({
 }
 
 .card:hover {
-  transform: translateY(-7px) scale(1.05); /* 悬停微放大 */
+  transform: translateY(-7px) scale(1.05);
   box-shadow: 0px 15px 25px rgba(0,0,0,0.5);
-  z-index: 10; /* 悬停时层级最高 */
+  z-index: 10;
 }
 
 .top {
@@ -64,7 +64,7 @@ defineProps({
   align-items: center;
   padding-left: 10px;
   height: 30px;
-  background-color: #2e2c45; /* 稍微深一点的标题栏背景 */
+  background-color: #2e2c45;
 }
 
 .circle { padding: 0 4px; }

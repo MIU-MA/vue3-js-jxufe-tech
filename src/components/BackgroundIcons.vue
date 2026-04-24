@@ -1,5 +1,4 @@
 <script setup>
-// 这个组件没有任何逻辑，只负责漂亮
 </script>
 
 <template>
@@ -36,7 +35,6 @@
   100% { transform: translateY(-120vh); opacity: 0; }
 }
 
-/* 具体的图标位置与内容 (原样搬运) */
 .floating-icons-bg li:nth-child(1) { left: 25%; animation-duration: 18s; }
 .floating-icons-bg li:nth-child(2) { left: 10%; width: 30px; height: 30px; animation-duration: 10s; }
 .floating-icons-bg li:nth-child(3) { left: 70%; width: 25px; height: 25px; animation-duration: 22s; }

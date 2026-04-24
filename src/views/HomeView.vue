@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import CodeCard from '../components/CodeCard.vue';
 import BackgroundIcons from '../components/BackgroundIcons.vue';
 
-// 1. 数据定义 (保持不变)
+// 1. 数据定义
 const newsList = ref([
   { id: 1, title: "数智&数模第一次联合授课", date: "2025年11月6日", summary: "开启你的Python编程之旅，探索数据科学的奥秘。", link: "news/first" },
   { id: 2, title: "睡觉", date: "2025年10月10日", summary: "睡大觉。", link: "news/sj" },
@@ -19,8 +19,6 @@ const floatingCodes = [
   { title: 'algo.cpp', content: `void dfs(int u) {\n  vis[u] = true;\n  for(int v : adj[u])\n    if(!vis[v]) dfs(v);\n}\n// 算法探索`, style: { bottom: '40%', right: '5%', animationDelay: '5s' } }
 ];
 
-// 2. 动画逻辑 (打字机逻辑保持不变，已省略以节省空间，直接用您原有的即可)
-const startTypingAnimation = () => { /* ...原代码... */ };
 const initScrollObserver = () => {
   const animatedElements = document.querySelectorAll('.fade-in-on-scroll');
   if (animatedElements.length > 0) {
@@ -36,7 +34,6 @@ const initScrollObserver = () => {
 };
 
 onMounted(() => {
-  // 注意：如果您的打字机逻辑在函数体外，请确保这里能调用到，或者直接复制原来的逻辑
   const typeWriter = (elementId, text, speed) => {
     let i = 0;
     const element = document.getElementById(elementId);
@@ -148,7 +145,6 @@ onMounted(() => {
 #hero {
     height: 100vh;
     background: #fff;
-    /* 流光背景动画 */
     background: linear-gradient(125deg, #ffffff 0%, #f0f4ff 30%, #e0ebff 70%, #ffffff 100%);
     background-size: 400% 400%;
     animation: gradientFlow 15s ease infinite;

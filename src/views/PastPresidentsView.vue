@@ -1,5 +1,4 @@
 <script setup>
-// 这里可以放逻辑代码，目前暂时不需要，但保留标签是好的习惯
 </script>
 
 <template>
