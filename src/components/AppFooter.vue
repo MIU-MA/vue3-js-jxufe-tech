@@ -104,13 +104,9 @@ const contactInfo = {
 </template>
 
 <style scoped>
-/* ==================== 
-   丰富饱满风格 Footer 
-   ==================== */
-
 .site-footer {
   width: 100%;
-  background-color: #f8f9fa; /* 极淡的灰色背景，增加层次感 */
+  background-color: #f8f9fa;
   color: #555;
   border-top: 1px solid #e9ecef;
   margin-top: 0;
@@ -128,7 +124,7 @@ const contactInfo = {
   gap: 40px;
 }
 
-/* --- 第一栏：品牌 --- */
+/* --- 第一栏--- */
 .brand-header {
   display: flex;
   align-items: center;
@@ -235,7 +231,7 @@ const contactInfo = {
   height: 20px;
   margin-right: 10px;
   border-radius: 50%;
-  /* 核心修改：移除滤镜，显示原色 */
+
   filter: none; 
 }
 

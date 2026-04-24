@@ -1,61 +1,80 @@
 <script setup>
-import { computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { newsData } from '../data/newsData.js'; // 导入数据
+import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { marked } from 'marked';
+import { newsData } from '../data/newsData.js';
 
 const route = useRoute();
-const router = useRouter();
-
-// 1. 获取当前路由参数中的 id (比如 /news/first -> id="first")
 const newsId = route.params.id;
 
-// 2. 根据 id 在数据中查找对应的文章
-const article = computed(() => {
-  return newsData.find(item => item.id === newsId);
-});
+// 获取文章元数据
+const article = computed(() => newsData.find(item => item.id === newsId));
 
-// 3. 如果找不到文章（比如乱输了 /news/abc），跳回首页或显示错误
-if (!article.value) {
-  // router.replace('/404'); // 如果有404页面的话
-  // 或者直接显示“文章不存在”
-}
+const parsedHtml = ref('');
+const isLoading = ref(true);
+
+const fetchMarkdown = async () => {
+  if (!article.value) return;
+  try {
+    isLoading.value = true;
+    // 从 public/articles/ 目录获取
+    const response = await fetch(`/articles/${newsId}.md`);
+    if (response.ok) {
+      const text = await response.text();
+      parsedHtml.value = marked.parse(text);
+    }
+  } catch (error) {
+    console.error('加载文章失败:', error);
+  } finally {
+    isLoading.value = false;
+  }
+};
 
 onMounted(() => {
-  setTimeout(() => document.querySelector('.article-container')?.classList.add('is-visible'), 100);
+  fetchMarkdown();
+  // 简单的渐入效果
+  setTimeout(() => document.querySelector('.article-wrapper')?.classList.add('opacity-100'), 100);
 });
 </script>
 
 <template>
-  <main class="page-container">
-    <article v-if="article" class="article-container fade-in-on-scroll">
-      <h1>{{ article.title }}</h1>
-      
-      <div class="article-meta">
-        <span>发布日期: {{ article.date }}</span>
-      </div>
-      
-      <div v-if="article.cover" class="article-cover-image">
-        <img :src="article.cover" :alt="article.title" style="width:100%;max-width:600px;display:block;margin:15px auto;border-radius:8px;">
-      </div>
-      
-      <div class="article-content">
-        <p class="article-intro" style="margin-top: 25px; font-size: 1.1em; line-height: 1.7;">
-            {{ article.intro }}
-        </p>
+  <main class="min-h-screen bg-gray-50 pt-50 pb-12 px-4 sm:px-6">
 
-        <div v-html="article.contentHtml"></div>
-      </div>
-      
-      <RouterLink to="/" class="back-link">« 返回首页</RouterLink>
-    </article>
+    <div v-if="article" class="article-wrapper max-w-4xl mx-auto bg-white p-8 shadow-sm rounded-2xl transition-opacity duration-700 opacity-0">
+      <header class="mb-8 border-b border-gray-100 pb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ article.title }}</h1>
+        <div class="flex items-center text-gray-500 text-sm">
+          <i class="far fa-calendar-alt mr-2"></i>
+          <span>发布日期: {{ article.date }}</span>
+        </div>
+      </header>
 
-    <div v-else class="not-found" style="text-align:center; padding: 50px;">
-      <h2>文章不存在</h2>
-      <RouterLink to="/" class="back-link">返回首页</RouterLink>
+      <div v-if="article.cover" class="mb-8">
+        <img :src="article.cover" :alt="article.title" class="w-full h-auto rounded-xl shadow-md mx-auto">
+      </div>
+
+      <blockquote class="border-l-4 border-blue-500 bg-blue-50 p-4 mb-8 text-gray-700 italic">
+        {{ article.intro }}
+      </blockquote>
+
+      <div
+          v-if="!isLoading"
+          class="prose prose-blue max-w-none prose-img:rounded-xl prose-headings:text-slate-900"
+          v-html="parsedHtml"
+      ></div>
+
+      <div v-else class="py-20 text-center text-gray-400">正在努力加载中...</div>
+
+      <div class="mt-12 pt-8 border-t border-gray-100">
+        <RouterLink to="/" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
+          <span class="mr-2">«</span> 返回首页
+        </RouterLink>
+      </div>
+    </div>
+
+    <div v-else class="text-center py-20">
+      <h2 class="text-2xl font-semibold text-gray-600">文章不见了</h2>
+      <RouterLink to="/" class="text-blue-500 mt-4 inline-block">回到首页</RouterLink>
     </div>
   </main>
 </template>
-
-<style scoped>
-/* 这里可以复用之前的样式，或者引用 main.css */
-</style>

@@ -25,9 +25,6 @@
 </template>
 
 <style scoped>
-/* 这里放置该页面特有的 CSS，或者你可以依赖全局 main.css */
-/* 为了确保样式生效，我们把 nb.html 里特有的样式搬过来 */
-
 .members-header {
     text-align: center;
     margin-bottom: 40px;

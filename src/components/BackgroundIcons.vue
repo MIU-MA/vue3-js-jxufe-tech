@@ -11,11 +11,10 @@
 </template>
 
 <style scoped>
-/* ==================== 移植过来的背景与动画样式 ==================== */
 .hero-bg-wrapper {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  overflow: hidden; /* 裁剪 */
+  overflow: hidden;
   z-index: 0;
   pointer-events: none;
 }
@@ -27,7 +26,7 @@
 
 .floating-icons-bg li {
   position: absolute; display: block; list-style: none;
-  color: rgba(0, 58, 122, 0.1); /* 颜色 */
+  color: rgba(0, 58, 122, 0.1);
   bottom: -100px; animation: floatUp 20s linear infinite;
   font-weight: bold; font-size: 1.5em;
 }
