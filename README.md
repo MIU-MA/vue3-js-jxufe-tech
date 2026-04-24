@@ -4,6 +4,7 @@
 1. 克隆项目：`git clone https://github.com/MIU-MA/vue3-js-jxufe-tech.git`
 2. 安装依赖：`npm install`
 3. 本地开发：`npm run dev`
+4. ！别忘了新建分支！
 
 ## 技术栈
 - Vue 3 (Vite)
