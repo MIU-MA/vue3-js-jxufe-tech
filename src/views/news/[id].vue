@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { marked } from 'marked';
 import { newsData } from '../../data/newsData.js';
@@ -7,40 +7,44 @@ import { newsData } from '../../data/newsData.js';
 const route = useRoute();
 const newsId = route.params.id;
 
-// 获取文章元数据
 const article = computed(() => newsData.find(item => item.id === newsId));
 
 const parsedHtml = ref('');
 const isLoading = ref(true);
+const loadError = ref(false);
 
-const fetchMarkdown = async () => {
-  if (!article.value) return;
+const markdownModules = import.meta.glob('../../articles/*.md', { query: '?raw', eager: true });
+
+async function loadArticle() {
+  if (!article.value) {
+    isLoading.value = false;
+    return;
+  }
+
   try {
-    isLoading.value = true;
-    // 从 public/articles/ 目录获取
-    const response = await fetch(`/articles/${newsId}.md`);
-    if (response.ok) {
-      const text = await response.text();
-      parsedHtml.value = marked.parse(text);
+    const key = `../../articles/${newsId}.md`;
+    const module = markdownModules[key];
+
+    if (module) {
+      parsedHtml.value = marked.parse(module.default || module);
+    } else {
+      loadError.value = true;
     }
   } catch (error) {
     console.error('加载文章失败:', error);
+    loadError.value = true;
   } finally {
     isLoading.value = false;
   }
-};
+}
 
-onMounted(() => {
-  fetchMarkdown();
-  // 简单的渐入效果
-  setTimeout(() => document.querySelector('.article-wrapper')?.classList.add('opacity-100'), 100);
-});
+loadArticle();
 </script>
 
 <template>
   <main class="min-h-screen bg-gray-50 pt-50 pb-12 px-4 sm:px-6">
 
-    <div v-if="article" class="article-wrapper max-w-4xl mx-auto bg-white p-8 shadow-sm rounded-2xl transition-opacity duration-700 opacity-0">
+    <div v-if="article" class="article-wrapper max-w-4xl mx-auto bg-white p-8 shadow-sm rounded-2xl">
       <header class="mb-8 border-b border-gray-100 pb-8">
         <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ article.title }}</h1>
         <div class="flex items-center text-gray-500 text-sm">
@@ -58,12 +62,17 @@ onMounted(() => {
       </blockquote>
 
       <div
-          v-if="!isLoading"
+          v-if="!isLoading && !loadError"
           class="prose prose-blue max-w-none prose-img:rounded-xl prose-headings:text-slate-900"
           v-html="parsedHtml"
       ></div>
 
-      <div v-else class="py-20 text-center text-gray-400">正在努力加载中...</div>
+      <div v-if="isLoading" class="py-20 text-center text-gray-400">正在努力加载中...</div>
+
+      <div v-if="loadError" class="py-20 text-center">
+        <p class="text-red-500 mb-4">文章加载失败，请稍后重试。</p>
+        <button @click="loadArticle" class="text-blue-600 hover:text-blue-800 underline">重新加载</button>
+      </div>
 
       <div class="mt-12 pt-8 border-t border-gray-100">
         <RouterLink to="/" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">

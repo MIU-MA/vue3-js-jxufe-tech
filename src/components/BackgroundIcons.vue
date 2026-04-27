@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div class="hero-bg-wrapper">
+  <div class="hero-bg-wrapper" aria-hidden="true">
     <ul class="floating-icons-bg">
       <li v-for="n in 15" :key="n"></li>
     </ul>

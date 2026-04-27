@@ -2,15 +2,11 @@
 defineProps({
   title: {
     type: String,
-    default: 'style.css'
+    default: 'untitled'
   },
   code: {
     type: String,
     default: ''
-  },
-  language: {
-    type: String,
-    default: 'css'
   }
 });
 </script>
@@ -34,7 +30,7 @@ defineProps({
       </div>
     </div>
     <div class="code-container">
-      <textarea class="area" readonly :value="code"></textarea>
+      <pre><code>{{ code }}</code></pre>
     </div>
   </div>
 </template>
@@ -83,18 +79,18 @@ defineProps({
 .code-container {
   flex: 1;
   padding: 10px;
+  overflow: auto;
 }
 
-.area {
-  width: 100%;
+.code-container pre {
+  margin: 0;
   height: 100%;
-  resize: none;
   background-color: transparent;
   border: none;
   color: #a9a9b3;
   font-family: 'Consolas', 'Monaco', monospace;
   font-size: 12px;
   line-height: 1.5;
+  white-space: pre-wrap;
 }
-.area:focus { outline: none; }
 </style>
