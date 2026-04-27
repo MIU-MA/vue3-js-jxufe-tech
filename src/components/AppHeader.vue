@@ -38,7 +38,7 @@ const closeMenu = () => {
       <ul>
         <li><RouterLink :to="{ path: '/', hash: '#about-us-hero' }" @click="closeMenu">社团简介</RouterLink></li>
         <li><RouterLink :to="{ path: '/', hash: '#news-hero' }" @click="closeMenu">最新动态</RouterLink></li>
-        <li><a href="https://qm.qq.com/q/LfPz6fha4W" target="_blank" @click="closeMenu">加入我们</a></li>
+        <li><a href="" target="_blank" @click="closeMenu">加入我们</a></li>
         <li><RouterLink to="/presidents" @click="closeMenu">历届负责人</RouterLink></li> 
         <li><RouterLink to="/members" @click="closeMenu">优秀成员</RouterLink></li> 
       </ul>

@@ -1,9 +1,19 @@
-import { createApp } from 'vue'
+// src/main.js
+import { ViteSSG } from 'vite-ssg'
 import App from './App.vue'
-import router from './router'
-import './assets/main.css'    // 引入全局样式
+import routes from '~pages'
 
-const app = createApp(App)
+import './assets/main.css'
 
-app.use(router) // 告诉 Vue 使用路由
-app.mount('#app') // 挂载到 index.html 的 id="app" 元素上
+export const createApp = ViteSSG(
+    App,
+    {
+        routes,
+        scrollBehavior(to, from, savedPosition) {
+            if (to.hash) return { el: to.hash, behavior: 'smooth', top: 60 }
+            return { top: 0 }
+        }
+    },
+    ({ app, router, isClient }) => {
+    }
+)

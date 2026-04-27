@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { marked } from 'marked';
-import { newsData } from '../data/newsData.js';
+import { newsData } from '../../data/newsData.js';
 
 const route = useRoute();
 const newsId = route.params.id;
