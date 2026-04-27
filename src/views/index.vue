@@ -1,13 +1,13 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import { RouterLink } from 'vue-router';
 import CodeCard from '../components/CodeCard.vue';
 import BackgroundIcons from '../components/BackgroundIcons.vue';
+import { useScrollReveal } from '../composables/useScrollReveal';
 
-// 1. 数据定义
 const newsList = ref([
-  { id: 1, title: "数智&数模第一次联合授课", date: "2025年11月6日", summary: "开启你的Python编程之旅，探索数据科学的奥秘。", link: "news/first" },
-  { id: 2, title: "睡觉", date: "2025年10月10日", summary: "睡大觉。", link: "news/sj" },
-  { id: 3, title: "新生电子扫盲课开始！", date: "2025年09月28日", summary: "专为大一新生准备的电子扫盲课，解决你的电脑使用难题，快来报名吧！", link: "news/dzsm" }
+  { id: 1, title: "数智&数模第一次联合授课", date: "2025年11月6日", summary: "开启你的Python编程之旅，探索数据科学的奥秘。", link: "/news/first" },
+  { id: 2, title: "新生电子扫盲课开始！", date: "2025年09月28日", summary: "专为大一新生准备的电子扫盲课，解决你的电脑使用难题，快来报名吧！", link: "/news/dzsm" }
 ]);
 
 const floatingCodes = [
@@ -19,41 +19,28 @@ const floatingCodes = [
   { title: 'algo.cpp', content: `void dfs(int u) {\n  vis[u] = true;\n  for(int v : adj[u])\n    if(!vis[v]) dfs(v);\n}\n// 算法探索`, style: { bottom: '40%', right: '5%', animationDelay: '5s' } }
 ];
 
-const initScrollObserver = () => {
-  const animatedElements = document.querySelectorAll('.fade-in-on-scroll');
-  if (animatedElements.length > 0) {
-      const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                  entry.target.classList.add('is-visible'); observer.unobserve(entry.target);
-              }
-          });
-      }, { threshold: 0.1 });
-      animatedElements.forEach(el => observer.observe(el));
-  }
-};
+useScrollReveal();
 
 onMounted(() => {
   const typeWriter = (elementId, text, speed) => {
     let i = 0;
     const element = document.getElementById(elementId);
     if (!element) return;
-    element.textContent = ''; 
+    element.textContent = '';
     function type() {
-      if (i < text.length) { element.textContent += text.charAt(i); i++; setTimeout(type, speed); } 
+      if (i < text.length) { element.textContent += text.charAt(i); i++; setTimeout(type, speed); }
       else { element.style.borderRight = 'none'; }
     }
     element.style.borderRight = '0.15em solid #ff6f00'; element.style.animation = 'blink-caret .75s step-end infinite'; type();
   };
   if (document.getElementById('typing-text-1')) {
-      typeWriter('typing-text-1', "江西财经大学", 100);
-      setTimeout(() => {
-          const el1 = document.getElementById('typing-text-1');
-          if (el1) el1.style.borderRight = 'none'; 
-          typeWriter('typing-text-2', "数智技术协会", 100);
-      }, "江西财经大学".length * 100 + 500); 
+    typeWriter('typing-text-1', "江西财经大学", 100);
+    setTimeout(() => {
+      const el1 = document.getElementById('typing-text-1');
+      if (el1) el1.style.borderRight = 'none';
+      typeWriter('typing-text-2', "数智技术协会", 100);
+    }, "江西财经大学".length * 100 + 500);
   }
-  initScrollObserver();
 });
 </script>
 
@@ -68,7 +55,7 @@ onMounted(() => {
     <section id="hero">
         <BackgroundIcons />
 
-        <div class="z-index-content"> 
+        <div class="z-index-content">
             <img src="/logo.jpg" alt="Logo" class="hero-logo-large">
             <h1 class="hero-title">
                 <span id="typing-text-1" class="hero-line-1"></span>
@@ -80,16 +67,16 @@ onMounted(() => {
     </section>
 
     <main class="page-container">
-      
+
       <section id="about-us-hero">
           <BackgroundIcons />
-          
+
           <div class="floating-code-container pc-only">
              <div v-for="(item, index) in floatingCodes" :key="index" class="floating-card-wrapper" :style="item.style">
                 <CodeCard :title="item.title" :code="item.content" />
              </div>
           </div>
-          
+
           <div class="about-us-card fade-in-on-scroll">
               <h2>关于我们</h2>
               <h3>江西财经大学信息管理与数学学院</h3>
@@ -99,7 +86,7 @@ onMounted(() => {
                   <li><strong>组织部</strong> 策划并执行社团的各项精彩活动。</li>
                   <li><strong>学习部</strong> 深入研究前沿技术并组织技术分享。</li>
               </ul>
-              <a href="" class="join-link" target="_blank">更多»</a>
+              <RouterLink to="/members" class="join-link">更多»</RouterLink>
           </div>
       </section>
 
@@ -240,7 +227,7 @@ onMounted(() => {
 
 /* 响应式 */
 .pc-only { display: none; }
-@media (min-width: 1024px) { 
+@media (min-width: 1024px) {
     .pc-only { display: block; }
     .hero-line-1 { font-size: 3em; }
     .hero-logo-large { width: 250px; height: 250px; }

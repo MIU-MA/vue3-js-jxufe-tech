@@ -88,7 +88,7 @@ const contactInfo = {
 
     <div class="footer-bottom">
      
-        <p>&copy; 2025 江西财经大学 数智技术协会. All Rights Reserved.</p>
+        <p>&copy; {{ new Date().getFullYear() }} 江西财经大学 数智技术协会. All Rights Reserved.</p>
         <div class="beian-row">
           <a href="https://beian.miit.gov.cn/" target="_blank">赣ICP备2025074452号</a>
           <span class="divider">|</span>
@@ -246,11 +246,14 @@ const contactInfo = {
 .footer-bottom {
   background-color: #003a7a;
   color: rgba(255, 255, 255, 0.8);
-  padding: 1px 0;
+  padding: 12px 20px;
   font-size: 0.85rem;
-  display:flex;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
 }
 
 .beian-row {
@@ -282,15 +285,10 @@ const contactInfo = {
 /* ==================== 移动端适配 ==================== */
 @media (max-width: 768px) {
   .footer-grid {
-    grid-template-columns: 1fr; /* 手机端单列堆叠 */
+    grid-template-columns: 1fr;
     gap: 30px;
   }
-  
-  .bottom-content {
-    flex-direction: column;
-    text-align: center;
-  }
-  
+
   .brand-desc {
     max-width: 100%;
   }

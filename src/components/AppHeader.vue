@@ -38,7 +38,7 @@ const closeMenu = () => {
       <ul>
         <li><RouterLink :to="{ path: '/', hash: '#about-us-hero' }" @click="closeMenu">社团简介</RouterLink></li>
         <li><RouterLink :to="{ path: '/', hash: '#news-hero' }" @click="closeMenu">最新动态</RouterLink></li>
-        <li><a href="" target="_blank" @click="closeMenu">加入我们</a></li>
+        <li><a href="/members" @click="closeMenu">加入我们</a></li>
         <li><RouterLink to="/presidents" @click="closeMenu">历届负责人</RouterLink></li> 
         <li><RouterLink to="/members" @click="closeMenu">优秀成员</RouterLink></li> 
       </ul>
@@ -121,5 +121,7 @@ header nav ul li a:hover { background-color: #002a5a; }
     header nav ul { display: flex; }
     header nav ul li a { border: none; padding: 0 15px; opacity: 0.9; }
     header nav ul li a:hover { background: transparent; opacity: 1; }
+    header nav ul li a.router-link-exact-active,
+    header nav ul li a.router-link-active { opacity: 1; font-weight: 600; }
 }
 </style>
