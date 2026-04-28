@@ -15,7 +15,7 @@ const friendLinks = ref([
     },
     {
       name: "网络安全协会",
-      url: "https://www.wpst.top",
+      url: "https://csec.jxufe.edu.cn",
       logo: "https://csec.jxufe.edu.cn/favicon.svg"
     },
     {
