@@ -12,5 +12,12 @@ export const newsData = [
     date: "2025年9月28日",
     cover: null,
     intro: "扫描二维码加入群聊，开启你的数智探索之旅。"
+  },
+  {
+    id: 'dachuang',
+    title: "破局·创新——大创项目申报与实战经验分享会",
+    date: "2026年4月10日",
+    cover: null,
+    intro: "杨波老师主持，多位优秀学生代表分享大创项目实践经验，为有志科研创新的同学指明方向。"
   }
 ];

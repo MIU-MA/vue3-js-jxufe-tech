@@ -1,14 +1,25 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import CodeCard from '../components/CodeCard.vue';
 import BackgroundIcons from '../components/BackgroundIcons.vue';
 import { useScrollReveal } from '../composables/useScrollReveal';
+import { newsData } from '../data/newsData.js';
 
-const newsList = ref([
-  { id: 1, title: "数智&数模第一次联合授课", date: "2025年11月6日", summary: "开启你的Python编程之旅，探索数据科学的奥秘。", link: "/news/first" },
-  { id: 2, title: "新生电子扫盲课开始！", date: "2025年09月28日", summary: "专为大一新生准备的电子扫盲课，解决你的电脑使用难题，快来报名吧！", link: "/news/dzsm" }
-]);
+const newsList = computed(() =>
+  [...newsData]
+    .sort((a, b) => {
+      const parse = (d) => d.date.match(/\d+/g).map(Number);
+      const [ay, am, ad] = parse(a);
+      const [by, bm, bd] = parse(b);
+      return by - ay || bm - am || bd - ad;
+    })
+    .map(item => ({
+      ...item,
+      summary: item.intro,
+      link: `/news/${item.id}`
+    }))
+);
 
 const floatingCodes = [
   { title: 'style.css', content: `.dsa-box {\n  display: grid;\n  gap: 2rem;\n  backdrop-filter: blur(10px);\n  animation: pulse 2s;\n}`, style: { top: '5%', left: '2%', animationDelay: '0s' } },
