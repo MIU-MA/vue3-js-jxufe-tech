@@ -15,5 +15,5 @@ import AppFooter from './components/AppFooter.vue';
 </template>
 
 <style>
-/* 这里放置全局的 CSS 变量或重置样式 */
+
 </style>
