@@ -272,10 +272,19 @@ const contactInfo = {
   color: #fff;
 }
 
+.police-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s;
+}
+.police-link:hover {
+  color: #fff;
+}
 .police-link img {
-  vertical-align: middle;
   height: 16px;
-  margin-right: 3px;
+  margin-right: 4px;
 }
 
 .divider {

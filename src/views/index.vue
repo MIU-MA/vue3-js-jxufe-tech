@@ -200,6 +200,7 @@ console.log('MIUMA');
 .join-link { display: block; margin: 20px auto 0; color: #ff6f00; font-weight: bold; }
 
 /* News Card */
+.news-hero-content  h2 { font-size: 2em; color: #003a7a; margin-bottom: 40px;text-align: center; }
 .news-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; }
 .news-card { width: 300px; height: 260px; perspective: 1000px; background: transparent; margin: 0 auto; }
 .news-card-inner {
