@@ -53,6 +53,7 @@ onMounted(() => {
     }, "江西财经大学".length * 100 + 500);
   }
 });
+console.log('MIUMA');
 </script>
 
 <template>
