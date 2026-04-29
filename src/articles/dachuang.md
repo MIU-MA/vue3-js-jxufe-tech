@@ -15,7 +15,7 @@
 
 此外，杨波老师还分享了项目申请书的撰写技巧，包括如何明确研究目标、制定研究计划、预期成果等，使在场的本科生们对如何成功申请大创项目有了更清晰的认识。
 <div align="center">
-  <img src="/images/大创.jpg" alt="我是图片" width="500" style="border-radius: 12px;" />
+  <img src="/images/dachuang.jpg" alt="我是图片" width="500" style="border-radius: 12px;" />
 </div>
 
 #### 经验分享
