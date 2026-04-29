@@ -98,7 +98,7 @@ console.log('MIUMA');
                   <li><strong>组织部</strong> 策划并执行社团的各项精彩活动。</li>
                   <li><strong>学习部</strong> 深入研究前沿技术并组织技术分享。</li>
               </ul>
-              <RouterLink to="/members" class="join-link">更多»</RouterLink>
+              <RouterLink to="/details" class="join-link">更多»</RouterLink>
           </div>
       </section>
 
