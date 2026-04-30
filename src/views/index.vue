@@ -141,7 +141,7 @@ onMounted(() => {
 }
 
 #hero {
-    height: 100vh;
+    height: calc(100vh - 60px);
     background: #fff;
     background: linear-gradient(125deg, #ffffff 0%, #f0f4ff 30%, #e0ebff 70%, #ffffff 100%);
     background-size: 400% 400%;
