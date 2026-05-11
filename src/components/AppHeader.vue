@@ -58,7 +58,7 @@ const closeMenu = () => {
 
     <nav :class="{ 'menu-open': isMenuOpen }">
       <ul>
-        <li><a href="/" @click="closeMenu">首页</a></li>
+        <li><RouterLink to="/" @click="closeMenu">首页</RouterLink></li>
         <li
           class="dropdown-trigger"
           @mouseenter="openDropdown"
@@ -74,8 +74,7 @@ const closeMenu = () => {
             <li><RouterLink to="/details" @click="closeMenu">关于协会</RouterLink></li>
           </ul>
         </li>
-        <li><a href="#news-hero" @click="closeMenu">最新动态</a></li>
-        <li><a href="/members" @click="closeMenu">加入我们</a></li>
+        <li><RouterLink to="/welcome" @click="closeMenu">加入我们</RouterLink></li>
       </ul>
     </nav>
   </header>
@@ -135,6 +134,12 @@ header nav {
     max-height: 0; overflow: hidden;
     background-color: #17589d; 
     transition: max-height 0.3s ease-in-out;
+    border-radius: 0 0 8px 8px;
+    max-width: 300px;
+}
+header nav.menu-open {
+    max-height: 500px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 8px rgba(0, 58, 122, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.2); 
     border-radius: 0 0 8px 8px;
@@ -187,10 +192,11 @@ header nav ul li a:hover { background-color: #002a5a; }
         box-shadow: none; width: auto; display: flex;
     }
     header nav ul { display: flex; }
+    header nav ul li { white-space: nowrap; }
     header nav ul li a { border: none; padding: 0 15px; opacity: 0.9; }
     header nav ul li a:hover { background: transparent; opacity: 1; }
     header nav ul li a.router-link-exact-active,
-    header nav ul li a.router-link-active { opacity: 1; font-weight: 600; }
+    header nav ul li a.router-link-active { background: linear-gradient(135deg, #17589d, #005a9a); border-radius: 4px; }
 
     /* PC 端下拉菜单 */
     .dropdown-menu {

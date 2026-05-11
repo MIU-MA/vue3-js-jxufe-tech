@@ -105,7 +105,7 @@ console.log('MIUMA');
       <section id="news-hero">
           <BackgroundIcons />
           <div class="news-hero-content fade-in-on-scroll">
-              <h2>社团最新动态</h2>
+              <h2>近期动态</h2>
               <div class="news-grid">
                   <div v-for="news in newsList" :key="news.id" class="news-card">
                       <div class="news-card-inner">
