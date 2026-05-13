@@ -5,7 +5,7 @@
 >[!NOTE]
 >
 >## 项目运行
->1. 克隆项目：`git clone https://github.com/MIU-MA/jxufe-tech-web.git`
+>1. 克隆项目：`git clone https://github.com/jxufe-tech/jxufe-tech-web.git`
 >2. 安装依赖：`npm install`
 >3. 本地开发：`npm run dev`
 >4. 还是直接fork吧
