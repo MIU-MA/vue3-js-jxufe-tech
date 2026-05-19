@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { marked } from 'marked';
+import MarkdownIt from 'markdown-it';
 import { newsData } from '../../data/newsData';
+
+const md = new MarkdownIt();
 
 const route = useRoute();
 const newsId = route.params.id;
@@ -27,7 +29,7 @@ async function loadArticle() {
 
     if (module) {
       const raw = (module as { default?: string }).default ?? (module as string);
-      parsedHtml.value = await marked.parse(raw) as string;
+      parsedHtml.value = md.render(raw);
     } else {
       loadError.value = true;
     }
