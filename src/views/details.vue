@@ -3,7 +3,7 @@ import { ref, useTemplateRef } from 'vue';
 import { useScrollReveal } from '../composables/useScrollReveal';
 
 const contributors = ref ([
-  { name: "MIUMA",  img: "/images/jt.jpg", url: "https://github.com/MIU-MA" },
+  { name: "MIUMA",  img: "https://www.miuma.top/images/jt.svg", url: "https://github.com/MIU-MA" },
   { name: "TangTangChu",img:"https://avatars.githubusercontent.com/u/61231159?v=4", url: "https://github.com/TangTangChu" },
 ]);
 
