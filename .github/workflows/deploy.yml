@@ -1,36 +1,36 @@
-# name: Deploy to Server
+name: Deploy to Server
 
-# on:
-#   push:
-# 分支:
-#       - main
+on:
+  push:
+分支:
+      - main
 
-# jobs:
-#   build-and-deploy:
-#     runs-on: ubuntu-latest
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 22
-#           cache: 'npm'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
 
-#       - name: Install dependencies and Build
-#         run: |
-#           npm ci
-#           npm run build
+      - name: Install dependencies and Build
+        run: |
+          npm ci
+          npm run build
 
-#       - name: Deploy dist to server
-#         uses: appleboy/scp-action@v0.1.7
-#         with:
-#           host: ${{ secrets.SERVER_IP }}
-#           username: root
-#           key: ${{ secrets.SERVER_SSH_KEY }}
-#           target: /www/wwwroot/www.jxufe-tech.top/jxufe-site/dist
-#           source: "dist/*"
-#           strip_components: 1
-#           overwrite: true
+      - name: Deploy dist to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          target: /www/wwwroot/www.jxufe-tech.top/jxufe-site/dist
+          source: "dist/*"
+          strip_components: 1
+          overwrite: true
