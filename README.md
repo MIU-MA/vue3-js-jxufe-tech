@@ -1,6 +1,6 @@
 # 欢迎新生饱饱们先从简单的vue3开始上手
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/MIU-MA/jxufe-tech-web)
-![GitHub last commit](https://img.shields.io/github/last-commit/MIU-MA/jxufe-tech-web?style=flat-square)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/jxufe-tech/jxufe-tech-web)
+![GitHub last commit](https://img.shields.io/github/last-commit/jxufe-tech/jxufe-tech-web?style=flat-square)
 
 >[!NOTE]
 >
