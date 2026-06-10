@@ -30,7 +30,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: root
           key: ${{ secrets.SERVER_SSH_KEY }}
-          target: /www/wwwroot/dsa-site
+          target: /www/wwwroot/www.jxufe-tech.top/jxufe-site/dist
           source: "dist/*"
           strip_components: 1
           overwrite: true
