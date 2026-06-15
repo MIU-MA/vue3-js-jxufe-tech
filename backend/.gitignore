@@ -1,21 +1,12 @@
-<<<<<<< HEAD
-# Dependencies
-node_modules/
-
-# Build outputs
-dist/
-dist-ssr/
-
-# Compiled output
+# compiled output
+/dist
+/node_modules
 /build
 
-=======
->>>>>>> upstream/test
 # Logs
 logs
 *.log
 npm-debug.log*
-<<<<<<< HEAD
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -44,17 +35,16 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# dotenv files
+# dotenv environment variable files
 .env
 .env.development.local
 .env.test.local
 .env.production.local
 .env.local
 
-# temp
+# temp directory
 .temp
 .tmp
-*.pnp
 
 # Runtime data
 pids
@@ -62,14 +52,14 @@ pids
 *.seed
 *.pid.lock
 
-# Diagnostic reports
+# Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Database
 *.db
 *.db-journal
 
-# Uploaded files
+# Uploaded files (keep directory structure)
 public/uploads/*
 !public/uploads/.gitkeep
 public/music/*
@@ -80,25 +70,3 @@ public/music/*
 
 # TypeScript incremental build
 *.tsbuildinfo
-=======
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
->>>>>>> upstream/test
