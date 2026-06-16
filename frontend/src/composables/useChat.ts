@@ -54,11 +54,28 @@ function saveHistory(messages: readonly ChatMessage[]): void {
   } catch {}
 }
 
+let chatToken = ''
+
+async function fetchToken(): Promise<string> {
+  try {
+    const res = await fetch('/api/chat/token')
+    if (!res.ok) throw new Error('获取令牌失败')
+    const data = await res.json()
+    return data.token || ''
+  } catch {
+    return ''
+  }
+}
+
 export function useChat() {
   const messages = ref<ChatMessage[]>(loadHistory())
   const isThinking = ref(false)
   const containerRef = ref<HTMLElement | null>(null)
   let abortController: AbortController | null = null
+
+  if (!chatToken) {
+    fetchToken().then(t => { chatToken = t })
+  }
 
   async function scrollToBottom() {
     await nextTick()
@@ -116,10 +133,15 @@ export function useChat() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: buildApiMessages() }),
+        body: JSON.stringify({ messages: buildApiMessages(), token: chatToken }),
         signal: abortController.signal,
       })
 
+      if (response.status === 403) {
+        chatToken = await fetchToken()
+        if (!chatToken) throw new Error('会话验证失败，请刷新页面后重试')
+        throw new Error('令牌已刷新，请重新发送消息')
+      }
       if (!response.ok) {
         throw new Error(`API 请求失败: ${response.status} ${response.statusText}`)
       }
