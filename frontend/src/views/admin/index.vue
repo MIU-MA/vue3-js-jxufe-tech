@@ -5,7 +5,6 @@ import AdminLogin from './AdminLogin.vue'
 import ArticlesPanel from './articles/ArticlesPanel.vue'
 import ImagesPanel from './images/ImagesPanel.vue'
 
-// ==================== Tabs ====================
 interface Tab { key: string; label: string; icon: string; panel: Component }
 const tabs: Tab[] = [
   { key: 'articles', label: '文章管理', icon: 'FileText', panel: ArticlesPanel },
@@ -17,7 +16,6 @@ function getTabIcon(iconName: string) {
 }
 const activeTab = ref('articles')
 
-// ==================== Auth ====================
 const token = ref('')
 provide('token', token)
 

@@ -11,7 +11,6 @@ const uploading = ref(false)
 const uploadMsg = ref('')
 const copied = ref('')
 
-// ====== 加载图片库 ======
 async function loadImages() {
   loading.value = true
   try {
@@ -22,7 +21,6 @@ async function loadImages() {
   finally { loading.value = false }
 }
 
-// ====== 上传图片 ======
 const fileInput = ref<HTMLInputElement>()
 
 async function handleUpload(e: Event) {
@@ -30,7 +28,6 @@ async function handleUpload(e: Event) {
   const file = target.files?.[0]
   if (!file) return
 
-  // 校验类型
   if (!file.type.startsWith('image/')) {
     uploadMsg.value = '只支持图片文件（jpg/png/webp/gif）'
     return
@@ -57,14 +54,12 @@ async function handleUpload(e: Event) {
   }
 }
 
-// ====== 复制 URL ======
 function copyUrl(url: string) {
   navigator.clipboard.writeText(url)
   copied.value = url
   setTimeout(() => copied.value = '', 2000)
 }
 
-// ====== 删除图片 ======
 async function deleteImage(filename: string) {
   if (!confirm('确定删除该图片？')) return
   try {
@@ -76,7 +71,6 @@ async function deleteImage(filename: string) {
   } catch { /* ignore */ }
 }
 
-// ====== 格式化文件大小 ======
 function fmtSize(bytes: number) {
   if (bytes < 1024) return bytes + ' B'
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'

@@ -204,7 +204,6 @@ onMounted(() => {
 </template>
 
 <style>
-/* ===== 3D 翻转新闻卡片 ===== */
 .news-card { perspective: 1000px; }
 .news-card-inner {
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -215,7 +214,6 @@ onMounted(() => {
 .news-card-back { backface-visibility: hidden; }
 .news-card-back { transform: rotateY(180deg); }
 
-/* ===== 浮动代码卡片 ===== */
 .floating-card-wrapper { transition: all 0.5s ease; }
 .floating-card-wrapper:hover {
   opacity: 1 !important;
@@ -224,7 +222,6 @@ onMounted(() => {
   filter: drop-shadow(0 20px 40px rgba(0, 58, 122, 0.4));
 }
 
-/* ===== 侧边导航点 ===== */
 .nav-dot {
   display: block;
   width: 12px; height: 12px;
