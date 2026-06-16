@@ -13,7 +13,6 @@ useScrollReveal();
 
 <template>
   <main class="max-w-6xl mx-auto px-5 pt-20 pb-10 min-h-[calc(100vh-350px)]">
-    <!-- 协会简介 -->
     <section
       class="fade-in-on-scroll max-w-[800px] mx-auto mb-16 p-10 rounded-2xl shadow-md transition-colors duration-300"
       :style="{ backgroundColor: 'var(--color-bg-card)', boxShadow: '0 4px 20px var(--color-shadow)' }"
@@ -24,7 +23,6 @@ useScrollReveal();
       </p>
     </section>
 
-    <!-- 部门介绍 -->
     <section
       class="fade-in-on-scroll max-w-[800px] mx-auto mb-16 p-10 rounded-2xl shadow-md transition-colors duration-300"
       :style="{ backgroundColor: 'var(--color-bg-card)', boxShadow: '0 4px 20px var(--color-shadow)' }"
@@ -58,7 +56,6 @@ useScrollReveal();
       </div>
     </section>
 
-    <!-- Contributors -->
     <section
       class="fade-in-on-scroll max-w-[800px] mx-auto mb-16 p-10 rounded-2xl shadow-md transition-colors duration-300"
       :style="{ backgroundColor: 'var(--color-bg-card)', boxShadow: '0 4px 20px var(--color-shadow)' }"
