@@ -30,10 +30,10 @@ function navigateTo(path: string) {
     class="fixed top-0 w-full h-[60px] px-5 md:px-[5%] flex justify-between items-center shadow-md z-[2000] transition-colors duration-300 box-border"
     :style="{ backgroundColor: 'var(--color-bg-header)' }"
   >
-    <RouterLink to="/" class="flex items-center text-white text-[1.2em] font-medium shrink overflow-hidden whitespace-nowrap text-ellipsis no-underline">
+    <div  class="flex items-center text-white text-[1.2em] font-medium shrink overflow-hidden whitespace-nowrap text-ellipsis no-underline">
       <img src="/logo.jpg" alt="数智技术协会会徽" class="h-[35px] w-[35px] mr-2 rounded-full bg-white">
       {{ $t('footer.brandName') }}
-    </RouterLink>
+    </div>
 
     <!-- PC 端导航 -->
     <ul class="hidden md:flex list-none p-0 m-0 text-center gap-0">
