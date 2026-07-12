@@ -72,7 +72,8 @@ export class SeedService implements OnModuleInit {
     console.log('  🔐 默认管理员账号已创建');
     console.log(`  用户名: ${defaultUsername}`);
     console.log(`  密码:   ${defaultPassword}`);
-    console.log('  请登录后立即修改密码！');
+    console.log('  ⚠️  这是公开已知的弱口令，请尽快登录后修改！');
+    console.log('     （当前版本暂无改密接口，请直接改数据库或重新生成）');
     console.log('══════════════════════════════════════════');
   }
 }
