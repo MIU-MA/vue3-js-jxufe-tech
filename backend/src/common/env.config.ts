@@ -54,12 +54,22 @@ export function assertSecretsOrExit(): void {
     problems.push(`生产环境 JWT_SECRET 长度应 >= 32（当前 ${jwtSecret.length}）`);
   }
 
+  if (isProd && !process.env.ADMIN_PASSWORD) {
+    problems.push('ADMIN_PASSWORD 未设置');
+  }
+
+  if (process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD.length < 8) {
+    problems.push(
+      `ADMIN_PASSWORD 长度必须至少为 8（当前 ${process.env.ADMIN_PASSWORD.length}）`,
+    );
+  }
+
   if (problems.length === 0) return;
 
   console.error('══════════════════════════════════════════');
   console.error('  🚨 安全配置校验失败，拒绝启动');
   problems.forEach((p) => console.error(`  - ${p}`));
-  console.error('  请在 backend/.env 或环境变量中配置强随机 JWT_SECRET');
+  console.error('  请在 backend/.env 或环境变量中配置强随机 JWT_SECRET 与 ADMIN_PASSWORD');
   console.error('══════════════════════════════════════════');
   process.exit(1);
 }

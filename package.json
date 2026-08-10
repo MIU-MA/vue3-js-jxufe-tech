@@ -10,6 +10,7 @@
     "kill:ports": "node scripts/kill-port.cjs 3003 5173",
     "start:backend": "cd backend && nest start",
     "start:backend:prod": "cd backend && node dist/main",
+    "reset:admin": "cd backend && npx ts-node --transpile-only src/scripts/reset-admin.ts",
     "build": "cd frontend && vite build && cd ../backend && nest build",
     "build:frontend": "cd frontend && vite build",
     "build:backend": "cd backend && nest build",

@@ -11,8 +11,9 @@
 export const BCRYPT_ROUNDS = 12;
 
 /**
- * 默认管理员口令（仅在未配置 ADMIN_PASSWORD 环境变量时使用）。
- * 公开已知，属弱口令 -- 生产环境务必通过环境变量覆盖。
+ * 历史遗留的公开已知默认弱口令（admin/admin123）。
+ *
+ * 注意：不再用于创建账号（数据库为空且未配置 ADMIN_PASSWORD 时服务拒绝启动，
+ * 杜绝生成已知默认账号）。仅用于检测旧账号是否仍在使用该弱口令，以便自动升级。
  */
-export const DEFAULT_ADMIN_USERNAME = 'admin';
 export const DEFAULT_ADMIN_PASSWORD = 'admin123';
