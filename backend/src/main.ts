@@ -9,18 +9,19 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { join } from 'path';
+import { ALLOWED_ORIGINS } from './common/origins';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // 1. CORS 白名单
+  // 1. 可信代理层数：让 req.ip 取 Nginx 追加的 X-Forwarded-For 末尾的真实 IP，
+  //    客户端自行伪造的 X-Forwarded-For 会被忽略，无法绕过限流。
+  //    TRUST_PROXY 默认 1（一层 Nginx），直连或转发层级不同时用环境变量覆盖。
+  app.set('trust proxy', Number(process.env.TRUST_PROXY ?? 1));
+
+  // 2. CORS 白名单（与 OriginGuard 共用同一来源常量）
   app.enableCors({
-    origin: [
-      'https://api.jxufe-tech.top',
-      'https://miuma-blog.vercel.app',
-      'http://localhost:3000',
-      'http://localhost:5173',
-    ],
+    origin: ALLOWED_ORIGINS as unknown as boolean | string | string[],
     credentials: true,
   });
 

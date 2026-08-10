@@ -14,7 +14,7 @@ import { Music } from './music/entities/music.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
-      database: 'data.db',
+      database: process.env.DB_PATH ?? 'data.db',
       autoLoadEntities: true, // 自动加载实体
       synchronize: true,      // 自动建表（开发利器）
     }),
