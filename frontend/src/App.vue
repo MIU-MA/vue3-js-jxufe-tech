@@ -8,7 +8,10 @@ import AppFooter from './components/AppFooter.vue';
   <AppHeader />
 
   <div class="pt-15">
-    <RouterView />
+    <!-- Suspense 让异步 setup（如 SSG 构建期抓取文章正文）能完成渲染 -->
+    <Suspense>
+      <RouterView />
+    </Suspense>
   </div>
 
   <AppFooter />

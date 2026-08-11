@@ -15,4 +15,14 @@ export class AppController {
     const g = globalThis as { __openapi_document?: unknown };
     return g.__openapi_document;
   }
+
+  /** 健康检查：供负载均衡 / 监控探活 */
+  @Get("api/health")
+  getHealth() {
+    return {
+      status: "ok",
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+    };
+  }
 }

@@ -4,13 +4,22 @@ import { Repository } from "typeorm";
 import { Article } from "./entities/article.entity";
 import { CreateArticleDto } from "./dto/create-article.dto";
 import { UpdateArticleDto } from "./dto/update-article.dto";
+import { RebuildService } from "../rebuild/rebuild.service";
 
 @Injectable()
 export class ArticlesService {
   constructor(
     @InjectRepository(Article)
     private repo: Repository<Article>,
+    private readonly rebuildService: RebuildService,
   ) {}
+
+  /** 文章变更后触发前端 SSG 重建（异步，不阻塞响应；未配置令牌则跳过）。 */
+  private triggerRebuild(): void {
+    void this.rebuildService
+      .trigger("cms-article-updated")
+      .catch(() => undefined);
+  }
 
   findAll() {
     return this.repo.find({ order: { createdAt: "DESC" } });
@@ -20,14 +29,16 @@ export class ArticlesService {
     return this.repo.findOne({ where: { id } });
   }
 
-  create(dto: CreateArticleDto) {
+  async create(dto: CreateArticleDto) {
     const article = this.repo.create({
       title: dto.title,
       content: dto.content,
       summary: dto.summary ?? null,
       publishedAt: dto.publishedAt ? new Date(dto.publishedAt) : new Date(),
     });
-    return this.repo.save(article);
+    const saved = await this.repo.save(article);
+    this.triggerRebuild();
+    return saved;
   }
 
   async update(id: number, dto: UpdateArticleDto) {
@@ -47,12 +58,16 @@ export class ArticlesService {
       article.publishedAt = dto.publishedAt ? new Date(dto.publishedAt) : null;
     }
 
-    return this.repo.save(article);
+    const saved = await this.repo.save(article);
+    this.triggerRebuild();
+    return saved;
   }
 
   async remove(id: number) {
     const article = await this.repo.findOne({ where: { id } });
     if (!article) throw new NotFoundException("文章不存在");
-    return this.repo.delete(id);
+    const result = await this.repo.delete(id);
+    this.triggerRebuild();
+    return result;
   }
 }

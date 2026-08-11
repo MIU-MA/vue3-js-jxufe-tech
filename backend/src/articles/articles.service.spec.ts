@@ -3,6 +3,7 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { NotFoundException } from "@nestjs/common";
 import { ArticlesService } from "./articles.service";
 import { Article } from "./entities/article.entity";
+import { RebuildService } from "../rebuild/rebuild.service";
 
 describe("ArticlesService", () => {
   let service: ArticlesService;
@@ -13,6 +14,7 @@ describe("ArticlesService", () => {
     save: jest.fn(),
     delete: jest.fn(),
   };
+  const mockRebuild = { trigger: jest.fn().mockResolvedValue(false) };
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -20,6 +22,7 @@ describe("ArticlesService", () => {
       providers: [
         ArticlesService,
         { provide: getRepositoryToken(Article), useValue: mockRepo },
+        { provide: RebuildService, useValue: mockRebuild },
       ],
     }).compile();
 
