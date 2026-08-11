@@ -10,13 +10,13 @@
  *
  * 说明：仅修改环境变量不会更新已创建的旧账号，需要本脚本显式重置。
  */
-import 'reflect-metadata';
-import { loadEnv } from '../common/env.config';
-import { DataSource } from 'typeorm';
-import { resolve } from 'path';
-import * as bcrypt from 'bcryptjs';
-import { User } from '../auth/entities/user.entity';
-import { BCRYPT_ROUNDS } from '../auth/auth.constants';
+import "reflect-metadata";
+import { loadEnv } from "../common/env.config";
+import { DataSource } from "typeorm";
+import { resolve } from "path";
+import * as bcrypt from "bcryptjs";
+import { User } from "../auth/entities/user.entity";
+import { BCRYPT_ROUNDS } from "../auth/auth.constants";
 
 loadEnv();
 
@@ -25,19 +25,24 @@ async function main() {
   const password = process.env.ADMIN_PASSWORD;
 
   if (!username || !password) {
-    console.error('❌ 需要 ADMIN_USERNAME 与 ADMIN_PASSWORD 环境变量（backend/.env 或环境变量）');
+    console.error(
+      "❌ 需要 ADMIN_USERNAME 与 ADMIN_PASSWORD 环境变量（backend/.env 或环境变量）",
+    );
     process.exit(1);
   }
   if (password.length < 8) {
-    console.error(`❌ ADMIN_PASSWORD 长度必须至少为 8（当前 ${password.length}）`);
+    console.error(
+      `❌ ADMIN_PASSWORD 长度必须至少为 8（当前 ${password.length}）`,
+    );
     process.exit(1);
   }
 
   // 数据库默认位于 backend/data.db（与后端进程一致）；测试可用 DB_PATH 覆盖
-  const database = process.env.DB_PATH || resolve(__dirname, '..', '..', 'data.db');
+  const database =
+    process.env.DB_PATH || resolve(__dirname, "..", "..", "data.db");
 
   const dataSource = new DataSource({
-    type: 'better-sqlite3',
+    type: "better-sqlite3",
     database,
     entities: [User],
     synchronize: false,
@@ -62,6 +67,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error('❌ 重置失败:', err);
+  console.error("❌ 重置失败:", err);
   process.exit(1);
 });

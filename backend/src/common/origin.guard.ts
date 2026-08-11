@@ -1,6 +1,11 @@
-import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
-import type { Request } from 'express';
-import { ALLOWED_ORIGIN_SET } from './origins';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+} from "@nestjs/common";
+import type { Request } from "express";
+import { ALLOWED_ORIGIN_SET } from "./origins";
 
 /**
  * 来源软校验（仅作辅助拦截，不承担认证职责）。
@@ -15,8 +20,8 @@ export class OriginGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<Request>();
-    const origin = request.headers['origin'];
-    const referer = request.headers['referer'];
+    const origin = request.headers["origin"];
+    const referer = request.headers["referer"];
 
     const raw = origin || referer;
     if (!raw) return true;

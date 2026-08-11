@@ -1,10 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { existsSync, readdirSync, unlinkSync } from 'fs';
-import { join } from 'path';
-import { Music } from './entities/music.entity';
-import { safeResolveUploadPath, PUBLIC_DIR } from '../common/path-guard';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { existsSync, readdirSync, unlinkSync } from "fs";
+import { join } from "path";
+import { Music } from "./entities/music.entity";
+import { safeResolveUploadPath, PUBLIC_DIR } from "../common/path-guard";
+import { CreateMusicDto } from "./dto/create-music.dto";
+import { UpdateMusicDto } from "./dto/update-music.dto";
 
 @Injectable()
 export class MusicService {
@@ -14,21 +16,21 @@ export class MusicService {
   ) {}
 
   findAll() {
-    return this.repo.find({ order: { createdAt: 'DESC' } });
+    return this.repo.find({ order: { createdAt: "DESC" } });
   }
 
   findOne(id: number) {
     return this.repo.findOne({ where: { id } });
   }
 
-  create(data: { title: string; artist: string; coverUrl?: string; audioUrl: string }) {
+  create(data: CreateMusicDto) {
     const music = this.repo.create(data);
     return this.repo.save(music);
   }
 
-  async update(id: number, dto: { title?: string; artist?: string; coverUrl?: string }) {
+  async update(id: number, dto: UpdateMusicDto) {
     const music = await this.repo.findOne({ where: { id } });
-    if (!music) throw new NotFoundException('音乐不存在');
+    if (!music) throw new NotFoundException("音乐不存在");
     if (dto.title !== undefined) music.title = dto.title;
     if (dto.artist !== undefined) music.artist = dto.artist;
     if (dto.coverUrl !== undefined) music.coverUrl = dto.coverUrl;
@@ -40,7 +42,7 @@ export class MusicService {
    */
   async remove(id: number) {
     const music = await this.repo.findOne({ where: { id } });
-    if (!music) throw new NotFoundException('音乐不存在');
+    if (!music) throw new NotFoundException("音乐不存在");
 
     await this.repo.delete(id);
 
@@ -48,7 +50,7 @@ export class MusicService {
     const match = music.audioUrl?.match(/\/music\/([^/]+)$/);
     if (match) {
       try {
-        const filePath = safeResolveUploadPath('music', match[1]);
+        const filePath = safeResolveUploadPath("music", match[1]);
         unlinkSync(filePath);
       } catch {
         // 文件可能已被手动清理，忽略
@@ -63,12 +65,12 @@ export class MusicService {
    * 返回本次新增的数量。
    */
   async syncFromDisk(): Promise<{ created: number; total: number }> {
-    const dir = join(PUBLIC_DIR, 'music');
+    const dir = join(PUBLIC_DIR, "music");
     if (!existsSync(dir)) return { created: 0, total: 0 };
 
     // 获取磁盘上所有音频文件
     const files = readdirSync(dir).filter(
-      (f) => !f.startsWith('.') && /\.(mp3|wav|ogg|flac|m4a|aac)$/i.test(f),
+      (f) => !f.startsWith(".") && /\.(mp3|wav|ogg|flac|m4a|aac)$/i.test(f),
     );
     if (files.length === 0) return { created: 0, total: 0 };
 
@@ -81,10 +83,10 @@ export class MusicService {
       const url = `/music/${filename}`;
       if (existingUrls.has(url)) continue;
 
-      const title = filename.replace(/\.[^.]+$/, ''); // 去扩展名当歌名
+      const title = filename.replace(/\.[^.]+$/, ""); // 去扩展名当歌名
       const music = this.repo.create({
         title,
-        artist: '本地文件',
+        artist: "本地文件",
         audioUrl: url,
       });
       await this.repo.save(music);

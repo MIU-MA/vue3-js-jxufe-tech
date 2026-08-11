@@ -1,5 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get } from "@nestjs/common";
+import { AppService } from "./app.service";
 
 @Controller()
 export class AppController {
@@ -10,8 +10,9 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('api-json')
+  @Get("api-json")
   getApiJson() {
-    return (globalThis as any).__openapi_document;
+    const g = globalThis as { __openapi_document?: unknown };
+    return g.__openapi_document;
   }
 }

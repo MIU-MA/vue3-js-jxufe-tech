@@ -1,10 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
-import type { TokenUsage } from './ai-budget.service';
+import { Injectable, Logger } from "@nestjs/common";
+import { readFileSync } from "fs";
+import { resolve } from "path";
+import type { TokenUsage } from "./ai-budget.service";
 
 export interface ChatMessage {
-  role: 'system' | 'user' | 'assistant';
+  role: "system" | "user" | "assistant";
   content: string;
 }
 
@@ -45,14 +45,14 @@ const MAX_CONTEXT_CHARS = 12_000;
  * 这里不再用 `{...process.env, ...file}` 的合并顺序，避免文件覆盖环境变量。
  */
 function loadEnvFile(): Record<string, string> {
-  const envPath = resolve(__dirname, '../../.env');
+  const envPath = resolve(__dirname, "../../.env");
   const result: Record<string, string> = {};
   try {
-    const content = readFileSync(envPath, 'utf-8');
-    for (const line of content.split('\n')) {
+    const content = readFileSync(envPath, "utf-8");
+    for (const line of content.split("\n")) {
       const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-      const eqIdx = trimmed.indexOf('=');
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const eqIdx = trimmed.indexOf("=");
       if (eqIdx === -1) continue;
       const key = trimmed.slice(0, eqIdx).trim();
       const value = trimmed.slice(eqIdx + 1).trim();
@@ -69,27 +69,27 @@ function loadEnvFile(): Record<string, string> {
 
 const env = { ...process.env, ...loadEnvFile() };
 
-const API_URL = 'https://api.deepseek.com/v1/chat/completions';
+const API_URL = "https://api.deepseek.com/v1/chat/completions";
 const REQUEST_TIMEOUT_MS = 30_000;
 const MAX_RETRIES = 1;
 
 function isRetryableError(err: unknown): boolean {
-  const msg = (err as Error).message?.toLowerCase() || '';
+  const msg = (err as Error).message?.toLowerCase() || "";
   const cause = (err as { cause?: Error })?.cause;
-  const causeMsg = cause?.message?.toLowerCase() || '';
+  const causeMsg = cause?.message?.toLowerCase() || "";
 
   const retryablePatterns = [
-    'fetch failed',
-    'network error',
-    'connection refused',
-    'connection reset',
-    'timeout',
-    'econnrefused',
-    'econnreset',
-    'etimedout',
-    'enotfound',
-    'eai_again',
-    'undici',
+    "fetch failed",
+    "network error",
+    "connection refused",
+    "connection reset",
+    "timeout",
+    "econnrefused",
+    "econnreset",
+    "etimedout",
+    "enotfound",
+    "eai_again",
+    "undici",
   ];
 
   return retryablePatterns.some((p) => msg.includes(p) || causeMsg.includes(p));
@@ -125,10 +125,10 @@ export class ChatService {
   private readonly MAX_SESSIONS = 2000;
 
   constructor() {
-    this.apiKey = env.DEEPSEEK_API_KEY || '';
+    this.apiKey = env.DEEPSEEK_API_KEY || "";
     if (!this.apiKey) {
       this.logger.warn(
-        'DEEPSEEK_API_KEY 未设置！聊天功能将不可用。请在 backend/.env 中配置 DEEPSEEK_API_KEY',
+        "DEEPSEEK_API_KEY 未设置！聊天功能将不可用。请在 backend/.env 中配置 DEEPSEEK_API_KEY",
       );
     } else {
       this.logger.log(
@@ -144,7 +144,10 @@ export class ChatService {
       history = [];
     }
 
-    history.push({ role: 'user', content: message.slice(0, MAX_MESSAGE_CHARS) });
+    history.push({
+      role: "user",
+      content: message.slice(0, MAX_MESSAGE_CHARS),
+    });
 
     // 只保留最近 MAX_HISTORY_TURNS 轮
     const recent = history.slice(-MAX_HISTORY_TURNS);
@@ -157,14 +160,17 @@ export class ChatService {
     }
 
     this.sessions.set(token, recent);
-    return [ { role: 'system', content: SYSTEM_PROMPT }, ...recent ];
+    return [{ role: "system", content: SYSTEM_PROMPT }, ...recent];
   }
 
   /** 记录一次 AI 回复（供后续上下文使用）。 */
   recordAssistantReply(token: string, content: string): void {
     if (!content) return;
     const history = this.sessions.get(token) ?? [];
-    history.push({ role: 'assistant', content: content.slice(0, MAX_MESSAGE_CHARS) });
+    history.push({
+      role: "assistant",
+      content: content.slice(0, MAX_MESSAGE_CHARS),
+    });
     this.sessions.set(token, history.slice(-MAX_HISTORY_TURNS));
 
     if (this.sessions.size > this.MAX_SESSIONS) {
@@ -190,7 +196,7 @@ export class ChatService {
     const messages = this.appendMessage(token, message);
 
     const body: Record<string, unknown> = {
-      model: 'deepseek-chat',
+      model: "deepseek-chat",
       messages,
       stream: true,
       temperature: 0.8,
@@ -207,9 +213,9 @@ export class ChatService {
         const response = await fetchWithTimeout(
           this.apiUrl,
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
               Authorization: `Bearer ${this.apiKey}`,
             },
             body: JSON.stringify(body),
@@ -227,7 +233,7 @@ export class ChatService {
           );
         }
 
-        this.logger.log('DeepSeek 流式响应已建立');
+        this.logger.log("DeepSeek 流式响应已建立");
         // 包一层变换流：透传数据并捕获流末尾的 usage
         return this.withUsageCapture(response.body!, onUsage);
       } catch (err) {
@@ -237,7 +243,7 @@ export class ChatService {
         this.logger.error(
           `请求失败 (尝试 ${attempt + 1}/${MAX_RETRIES + 1}): ` +
             `${lastError.message}` +
-            (cause ? ` [cause: ${cause.message}]` : ''),
+            (cause ? ` [cause: ${cause.message}]` : ""),
         );
 
         if (!isRetryableError(err)) {
@@ -256,7 +262,7 @@ export class ChatService {
       }
     }
 
-    throw lastError ?? new Error('未知错误');
+    throw lastError ?? new Error("未知错误");
   }
 
   /**
@@ -269,7 +275,7 @@ export class ChatService {
   ): ReadableStream<Uint8Array> {
     const reader = source.getReader();
     const decoder = new TextDecoder();
-    let buffer = '';
+    let buffer = "";
     const logger = this.logger;
 
     return new ReadableStream<Uint8Array>({
@@ -282,19 +288,26 @@ export class ChatService {
             if (done) break;
             buffer += decoder.decode(value, { stream: true });
 
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
+            const lines = buffer.split("\n");
+            buffer = lines.pop() || "";
 
             for (const line of lines) {
-              if (!line.startsWith('data: ')) continue;
+              if (!line.startsWith("data: ")) continue;
               const payload = line.slice(6);
-              if (payload === '[DONE]') continue;
+              if (payload === "[DONE]") continue;
               try {
-                const parsed = JSON.parse(payload);
-                if (parsed.usage && parsed.usage.prompt_tokens != null) {
+                const parsed = JSON.parse(payload) as {
+                  usage?: {
+                    prompt_tokens?: number;
+                    completion_tokens?: number;
+                  };
+                };
+                const promptTokens = parsed.usage?.prompt_tokens;
+                const completionTokens = parsed.usage?.completion_tokens;
+                if (promptTokens != null && completionTokens != null) {
                   lastUsage = {
-                    promptTokens: parsed.usage.prompt_tokens,
-                    completionTokens: parsed.usage.completion_tokens,
+                    promptTokens,
+                    completionTokens,
                   };
                 }
               } catch {

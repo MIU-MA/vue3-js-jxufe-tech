@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { OriginGuard } from './origin.guard';
-import { RateLimiterService, RateLimitGuard } from './rate-limit.guard';
+import { Module } from "@nestjs/common";
+import { OriginGuard } from "./origin.guard";
+import { RateLimiterService, RateLimitGuard } from "./rate-limit.guard";
 
 @Module({
   providers: [RateLimiterService, RateLimitGuard, OriginGuard],

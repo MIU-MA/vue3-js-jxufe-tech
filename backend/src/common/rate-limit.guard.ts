@@ -7,8 +7,8 @@ import {
   SetMetadata,
   UseGuards,
   applyDecorators,
-} from '@nestjs/common';
-import type { Request } from 'express';
+} from "@nestjs/common";
+import type { Request } from "express";
 
 interface RateEntry {
   count: number;
@@ -24,7 +24,7 @@ export interface RateLimitConfig {
   keyBy?: (req: Request) => string;
 }
 
-export const RATE_LIMIT_META = 'rate_limit_config';
+export const RATE_LIMIT_META = "rate_limit_config";
 
 /**
  * 在路由上声明限流规则，并挂载 RateLimitGuard。
@@ -48,7 +48,7 @@ export class RateLimiterService {
 
   check(key: string, limit: number, ttlMs: number): boolean {
     const now = Date.now();
-    let entry = this.hits.get(key);
+    const entry = this.hits.get(key);
 
     if (!entry || now > entry.resetAt) {
       // 惰性清理：命中时顺带清理过期项，防止内存无限增长
@@ -87,18 +87,18 @@ export class RateLimitGuard implements CanActivate {
   constructor(private readonly limiter: RateLimiterService) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const config: RateLimitConfig | undefined = Reflect.getMetadata(
+    const config = Reflect.getMetadata(
       RATE_LIMIT_META,
       context.getHandler(),
-    );
+    ) as RateLimitConfig | undefined;
     if (!config) return true;
 
     const request = context.switchToHttp().getRequest<Request>();
-    const key = config.keyBy ? config.keyBy(request) : request.ip || 'unknown';
+    const key = config.keyBy ? config.keyBy(request) : request.ip || "unknown";
 
     if (!this.limiter.check(key, config.limit, config.ttlMs)) {
       throw new HttpException(
-        '请求过于频繁，请稍后再试',
+        "请求过于频繁，请稍后再试",
         HttpStatus.TOO_MANY_REQUESTS,
       );
     }

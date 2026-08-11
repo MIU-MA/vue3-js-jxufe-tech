@@ -1,7 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { AiUsage } from './entities/ai-usage.entity';
+import { Injectable, Logger } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { AiUsage } from "./entities/ai-usage.entity";
 
 export interface TokenUsage {
   promptTokens: number;
@@ -19,8 +19,8 @@ export interface BudgetStatus {
 /** 今天的 YYYY-MM-DD */
 export function todayKey(d = new Date()): string {
   const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 }
 
@@ -32,8 +32,12 @@ export function todayKey(d = new Date()): string {
 export class AiBudgetService {
   private readonly logger = new Logger(AiBudgetService.name);
 
-  private readonly requestLimit = Number(process.env.AI_DAILY_REQUEST_LIMIT ?? 200);
-  private readonly tokenBudget = Number(process.env.AI_DAILY_TOKEN_BUDGET ?? 200_000);
+  private readonly requestLimit = Number(
+    process.env.AI_DAILY_REQUEST_LIMIT ?? 200,
+  );
+  private readonly tokenBudget = Number(
+    process.env.AI_DAILY_TOKEN_BUDGET ?? 200_000,
+  );
   private enabled = true;
 
   constructor(
@@ -45,7 +49,9 @@ export class AiBudgetService {
   async check(): Promise<boolean> {
     if (!this.enabled) return false;
     const row = await this.getOrCreateToday();
-    const ok = row.requests < this.requestLimit && row.promptTokens + row.completionTokens < this.tokenBudget;
+    const ok =
+      row.requests < this.requestLimit &&
+      row.promptTokens + row.completionTokens < this.tokenBudget;
     if (!ok) {
       this.enabled = false;
       this.logger.warn(
@@ -65,7 +71,9 @@ export class AiBudgetService {
 
     if (row.promptTokens + row.completionTokens >= this.tokenBudget) {
       this.enabled = false;
-      this.logger.warn('AI 已达每日 token 预算上限，聊天功能已关闭（次日自动恢复）');
+      this.logger.warn(
+        "AI 已达每日 token 预算上限，聊天功能已关闭（次日自动恢复）",
+      );
     }
   }
 

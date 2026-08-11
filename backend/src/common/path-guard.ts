@@ -1,13 +1,13 @@
-import { basename, extname, join, resolve, sep } from 'path';
-import { existsSync, statSync } from 'fs';
-import { NotFoundException, BadRequestException } from '@nestjs/common';
+import { basename, extname, join, resolve, sep } from "path";
+import { existsSync, statSync } from "fs";
+import { NotFoundException, BadRequestException } from "@nestjs/common";
 
 /**
  * 上传根目录（backend/public）的绝对路径。
  * 基于 __dirname 而非相对 CWD，保证无论从仓库根还是 backend 启动都指向同一目录。
  * 编译后位于 backend/dist/common/，故向上两级到 backend/public。
  */
-export const PUBLIC_DIR = join(__dirname, '..', '..', 'public');
+export const PUBLIC_DIR = join(__dirname, "..", "..", "public");
 
 /**
  * 安全地解析上传目录下的文件路径，防止路径穿越攻击。
@@ -31,15 +31,15 @@ export function safeResolveUploadPath(
   // 1. 剥掉目录部分，只保留文件名 -- 这一步直接挡住 `../` 穿越
   const safeName = basename(filename);
 
-  if (!safeName || safeName === '.' || safeName === '..') {
-    throw new BadRequestException('非法文件名');
+  if (!safeName || safeName === "." || safeName === "..") {
+    throw new BadRequestException("非法文件名");
   }
 
   // 2. 扩展名白名单校验
   if (allowedExts) {
     const ext = extname(safeName).toLowerCase();
     if (!allowedExts.includes(ext)) {
-      throw new BadRequestException(`不支持的文件类型: ${ext || '无扩展名'}`);
+      throw new BadRequestException(`不支持的文件类型: ${ext || "无扩展名"}`);
     }
   }
 
@@ -49,15 +49,15 @@ export function safeResolveUploadPath(
   const resolvedBase = resolve(baseDir);
   const resolvedFile = resolve(filePath);
   if (!resolvedFile.startsWith(resolvedBase + sep)) {
-    throw new BadRequestException('非法路径');
+    throw new BadRequestException("非法路径");
   }
 
   // 4. 确认是文件而非目录
   if (!existsSync(filePath)) {
-    throw new NotFoundException('文件不存在');
+    throw new NotFoundException("文件不存在");
   }
   if (!statSync(filePath).isFile()) {
-    throw new BadRequestException('非法目标');
+    throw new BadRequestException("非法目标");
   }
 
   return filePath;

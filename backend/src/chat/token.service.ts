@@ -1,5 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { createHmac, randomBytes } from 'crypto';
+import { Injectable, Logger } from "@nestjs/common";
+import { createHmac, randomBytes } from "crypto";
 
 /**
  * 聊天会话令牌服务。
@@ -13,15 +13,15 @@ export class TokenService {
   private readonly tokens = new Map<string, number>();
 
   private readonly SECRET =
-    process.env.CHAT_TOKEN_SECRET || randomBytes(32).toString('hex');
+    process.env.CHAT_TOKEN_SECRET || randomBytes(32).toString("hex");
   private readonly TTL_MS = 24 * 60 * 60 * 1000;
 
   generate(ip: string): string {
     const timestamp = Date.now();
-    const nonce = randomBytes(8).toString('hex');
-    const hmac = createHmac('sha256', this.SECRET)
+    const nonce = randomBytes(8).toString("hex");
+    const hmac = createHmac("sha256", this.SECRET)
       .update(`${ip}:${timestamp}:${nonce}`)
-      .digest('hex')
+      .digest("hex")
       .slice(0, 24);
     const token = `${timestamp}:${nonce}:${hmac}`;
 
@@ -32,7 +32,7 @@ export class TokenService {
 
   /** 校验令牌是否由服务端签发且未过期。 */
   validate(ip: string, token: string): boolean {
-    const parts = token.split(':');
+    const parts = token.split(":");
     if (parts.length !== 3) return false;
 
     const timestamp = parseInt(parts[0], 10);
@@ -43,9 +43,9 @@ export class TokenService {
     // token 必须是服务端签发的（防伪造）
     if (!this.tokens.has(token)) return false;
 
-    const expectedHmac = createHmac('sha256', this.SECRET)
+    const expectedHmac = createHmac("sha256", this.SECRET)
       .update(`${ip}:${timestamp}:${parts[1]}`)
-      .digest('hex')
+      .digest("hex")
       .slice(0, 24);
 
     return parts[2] === expectedHmac;
