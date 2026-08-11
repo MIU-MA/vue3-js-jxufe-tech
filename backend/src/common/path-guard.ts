@@ -3,6 +3,13 @@ import { existsSync, statSync } from 'fs';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 
 /**
+ * 上传根目录（backend/public）的绝对路径。
+ * 基于 __dirname 而非相对 CWD，保证无论从仓库根还是 backend 启动都指向同一目录。
+ * 编译后位于 backend/dist/common/，故向上两级到 backend/public。
+ */
+export const PUBLIC_DIR = join(__dirname, '..', '..', 'public');
+
+/**
  * 安全地解析上传目录下的文件路径，防止路径穿越攻击。
  *
  * - 只取传入名称的 basename（剥掉所有目录部分），杜绝 `../`
@@ -19,7 +26,7 @@ export function safeResolveUploadPath(
   filename: string,
   allowedExts?: string[],
 ): string {
-  const baseDir = join('./public', subDir);
+  const baseDir = join(PUBLIC_DIR, subDir);
 
   // 1. 剥掉目录部分，只保留文件名 -- 这一步直接挡住 `../` 穿越
   const safeName = basename(filename);
