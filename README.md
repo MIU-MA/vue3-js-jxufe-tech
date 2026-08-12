@@ -26,7 +26,6 @@ jxufe-tech/
 │   ├── src/
 │   │   ├── auth/      # 认证 (JWT) + 登录限流
 │   │   ├── articles/  # 文章管理（变更后自动触发前端 SSG 重建）
-│   │   ├── music/     # 音乐管理
 │   │   ├── chat/      # AI 对话（每日预算、会话历史、反滥用）
 │   │   ├── upload/    # 文件上传（magic bytes 校验）
 │   │   ├── migrations # TypeORM 数据库迁移

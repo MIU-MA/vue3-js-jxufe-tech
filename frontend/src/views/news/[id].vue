@@ -44,11 +44,8 @@ async function loadArticle(id: string) {
   }
 }
 
-// 异步 setup：SSG 构建期与客户端首屏都会执行，
-// 由 App.vue 的 <Suspense> 等待其完成（构建期生成含正文的静态 HTML）
 await loadArticle(route.params.id as string);
 
-// 客户端 SPA 导航到其他文章时重新加载（初次加载已由异步 setup 完成）
 watch(() => route.params.id, (newId) => {
   if (newId) loadArticle(newId as string);
 });
