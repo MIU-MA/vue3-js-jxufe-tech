@@ -78,10 +78,6 @@ server {
         alias /www/wwwroot/jxufe-tech/backend/public/uploads/;
     }
 
-    location /music/ {
-        alias /www/wwwroot/jxufe-tech/backend/public/music/;
-    }
-
     # SSG 页面：命中文件则返回，否则回退 index.html
     location / {
         try_files $uri $uri.html $uri/ /index.html;
@@ -114,7 +110,7 @@ cat ~/.ssh/github-actions   # 复制全部内容
 ```bash
 # 在服务器上手动跑一次，确保目录与依赖就绪
 cd /www/wwwroot/jxufe-tech
-mkdir -p backend/public/uploads backend/public/music
+mkdir -p backend/public/uploads
 npm ci --omit=dev
 pm2 start backend/ecosystem.config.js
 pm2 save

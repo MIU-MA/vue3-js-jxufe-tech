@@ -16,7 +16,6 @@ export interface BudgetStatus {
   tokenBudget: number;
 }
 
-/** 今天的 YYYY-MM-DD */
 export function todayKey(d = new Date()): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -24,10 +23,7 @@ export function todayKey(d = new Date()): string {
   return `${y}-${m}-${day}`;
 }
 
-/**
- * AI 每日预算控制：超请求数或超 token 用量后自动关闭聊天功能。
- * 计数持久化到 DB，避免进程重启丢失，也能在多实例部署下近似生效。
- */
+// 计数持久化到 DB，避免进程重启丢失，多实例部署下也近似生效
 @Injectable()
 export class AiBudgetService {
   private readonly logger = new Logger(AiBudgetService.name);
@@ -45,7 +41,6 @@ export class AiBudgetService {
     private usageRepo: Repository<AiUsage>,
   ) {}
 
-  /** 检查今日是否还可继续使用聊天。超限返回 false（调用方返回 429）。 */
   async check(): Promise<boolean> {
     if (!this.enabled) return false;
     const row = await this.getOrCreateToday();
@@ -61,7 +56,6 @@ export class AiBudgetService {
     return ok;
   }
 
-  /** 记录一次请求的用量，超 token 预算则关闭聊天。 */
   async record(usage: TokenUsage): Promise<void> {
     const row = await this.getOrCreateToday();
     row.requests += 1;
@@ -77,7 +71,6 @@ export class AiBudgetService {
     }
   }
 
-  /** 当前状态，供 GET /api/chat/status 展示。 */
   async status(): Promise<BudgetStatus> {
     const row = await this.getOrCreateToday();
     return {

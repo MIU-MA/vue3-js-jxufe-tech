@@ -2,21 +2,11 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { UploadController } from "./upload.controller";
 import { Article } from "../articles/entities/article.entity";
-import { Music } from "../music/entities/music.entity";
-import {
-  detectImageType,
-  detectAudioType,
-  validateMarkdownContent,
-} from "./upload-utils";
+import { detectImageType, validateMarkdownContent } from "./upload-utils";
 
 describe("UploadController", () => {
   let controller: UploadController;
   const mockArticleRepo = {
-    create: jest.fn(),
-    save: jest.fn(),
-    delete: jest.fn(),
-  };
-  const mockMusicRepo = {
     create: jest.fn(),
     save: jest.fn(),
     delete: jest.fn(),
@@ -28,7 +18,6 @@ describe("UploadController", () => {
       controllers: [UploadController],
       providers: [
         { provide: getRepositoryToken(Article), useValue: mockArticleRepo },
-        { provide: getRepositoryToken(Music), useValue: mockMusicRepo },
       ],
     }).compile();
 
@@ -51,16 +40,6 @@ describe("UploadController", () => {
         "utf-8",
       );
       expect(detectImageType(html)).toBeNull();
-    });
-
-    it("识别 MP3（ID3 头）", () => {
-      const mp3 = Buffer.from("ID3\x04\x00\x00\x00\x00\x00\x00", "latin1");
-      expect(detectAudioType(mp3)).toBe("mp3");
-    });
-
-    it("文本内容不是合法音频", () => {
-      const text = Buffer.from("not real audio data at all", "utf-8");
-      expect(detectAudioType(text)).toBeNull();
     });
 
     it("Markdown 文本合法、二进制内容被拒", () => {

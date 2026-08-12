@@ -24,7 +24,6 @@ export class AddArticleSummaryAndPublishedAt1786352000000 implements MigrationIn
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // SQLite 不支持 DROP COLUMN，降级迁移不做任何事
     void queryRunner;
     await Promise.resolve();
   }

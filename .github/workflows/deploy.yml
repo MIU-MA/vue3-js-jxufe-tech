@@ -95,7 +95,7 @@ jobs:
           script: |
             cd /www/wwwroot/jxufe-tech
             # 确保静态资源目录存在
-            mkdir -p backend/public/uploads backend/public/music
+            mkdir -p backend/public/uploads
             # 从根目录统一安装生产依赖（backend/dist 会向上解析到根 node_modules）
             npm ci --omit=dev
             # 用 PM2 启动或重启进程（ecosystem 内 cwd 指向 backend）

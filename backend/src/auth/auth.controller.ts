@@ -17,10 +17,6 @@ import { OriginGuard } from "../common/origin.guard";
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // 注：注册接口已移除。公开注册对一个"仅管理员发文章"的站点是安全风险
-  // （任何人都能创建账号）。管理员账号由 SeedService 在启动时创建。
-  // 如需新增管理员，请通过服务端 seed 脚本或受保护的管理接口。
-
   @Post("login")
   @HttpCode(HttpStatus.OK)
   @UseGuards(OriginGuard)

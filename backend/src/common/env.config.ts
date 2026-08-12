@@ -1,13 +1,7 @@
 import { readFileSync } from "fs";
 import { resolve } from "path";
 
-/**
- * 集中加载 backend/.env 到 process.env。
- * 在 main.ts 最早期调用，确保所有模块都能读到配置。
- *
- * 不引入 dotenv 依赖，沿用项目已有的手动解析方式（见 chat.service.ts）。
- * 已存在的 process.env 值优先，不覆盖（生产环境用真实环境变量）。
- */
+// 已存在的 process.env 值优先，.env 只回填缺失项（生产环境用真实环境变量）
 export function loadEnv(): void {
   const envPath = resolve(__dirname, "../../.env");
   try {
@@ -24,19 +18,15 @@ export function loadEnv(): void {
       }
     }
   } catch {
-    // .env 不存在是正常的（生产环境用真实环境变量），静默跳过
+    /* 无 .env 文件 */
   }
 }
 
-/**
- * 校验生产环境必需的密钥。
- * 缺失或使用已知弱值时，拒绝启动 —— 宁可启动失败，也不要用可预测的密钥上线。
- */
+// 缺失或使用已知弱值时拒绝启动，避免用可预测的密钥上线
 export function assertSecretsOrExit(): void {
   const isProd = process.env.NODE_ENV === "production";
   const jwtSecret = process.env.JWT_SECRET;
 
-  // 已知的弱/占位值，无论环境都不该用
   const WEAK_VALUES = new Set([
     "secret-key-change-in-production",
     "change-me-to-a-random-string",

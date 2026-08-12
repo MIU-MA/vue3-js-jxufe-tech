@@ -4,12 +4,10 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { ArticlesModule } from "./articles/articles.module";
-import { MusicModule } from "./music/music.module";
 import { ChatModule } from "./chat/chat.module";
 import { UploadController } from "./upload/upload.controller";
 import { RebuildModule } from "./rebuild/rebuild.module";
 import { Article } from "./articles/entities/article.entity";
-import { Music } from "./music/entities/music.entity";
 import { join } from "path";
 
 @Module({
@@ -17,16 +15,14 @@ import { join } from "path";
     TypeOrmModule.forRoot({
       type: "better-sqlite3",
       database: process.env.DB_PATH ?? "data.db",
-      autoLoadEntities: true, // 自动加载实体
-      // 生产环境关闭 synchronize，结构变更走正式 migration
+      autoLoadEntities: true,
       synchronize: process.env.NODE_ENV !== "production",
       migrations: [join(__dirname, "migrations", "*")],
       migrationsRun: process.env.NODE_ENV === "production",
     }),
-    TypeOrmModule.forFeature([Article, Music]), // UploadController 注入
+    TypeOrmModule.forFeature([Article]),
     AuthModule,
     ArticlesModule,
-    MusicModule,
     ChatModule,
     RebuildModule,
   ],

@@ -1,6 +1,5 @@
 import { loadEnv, assertSecretsOrExit } from "./common/env.config";
 
-// 必须在 NestFactory 之前加载，确保所有模块读到 .env
 loadEnv();
 assertSecretsOrExit();
 
@@ -16,12 +15,9 @@ import { ALLOWED_ORIGINS } from "./common/origins";
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // 1. 可信代理层数：让 req.ip 取 Nginx 追加的 X-Forwarded-For 末尾的真实 IP，
-  //    客户端自行伪造的 X-Forwarded-For 会被忽略，无法绕过限流。
-  //    TRUST_PROXY 默认 1（一层 Nginx），直连或转发层级不同时用环境变量覆盖。
+  // trust proxy 让 req.ip 取 Nginx 追加的 X-Forwarded-For，客户端伪造无效
   app.set("trust proxy", Number(process.env.TRUST_PROXY ?? 1));
 
-  // 2. 安全响应头 + CSP（脚本只允许同源，图片/字体/样式允许 CDN）
   app.use(
     helmet({
       contentSecurityPolicy: {
@@ -39,7 +35,6 @@ async function bootstrap() {
     }),
   );
 
-  // 3. CORS 白名单（与 OriginGuard 共用同一来源常量）
   app.enableCors({
     origin: ALLOWED_ORIGINS as unknown as boolean | string | string[],
     credentials: true,
@@ -47,7 +42,6 @@ async function bootstrap() {
 
   app.useStaticAssets(join(__dirname, "..", "public"));
 
-  // 全局校验：过滤未声明字段、拒绝未声明字段、自动类型转换
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

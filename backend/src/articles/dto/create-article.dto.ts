@@ -12,7 +12,7 @@ export class CreateArticleDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
-  title: string;
+  title!: string;
 
   @ApiProperty({
     description: "正文内容（Markdown）",
@@ -21,7 +21,7 @@ export class CreateArticleDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(500_000)
-  content: string;
+  content!: string;
 
   @ApiPropertyOptional({ description: "摘要" })
   @IsOptional()

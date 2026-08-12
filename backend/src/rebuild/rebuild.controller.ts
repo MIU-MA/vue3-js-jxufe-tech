@@ -14,10 +14,6 @@ import {
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { RebuildService } from "./rebuild.service";
 
-/**
- * 手动触发前端 SSG 重建（CMS 文章发布后自动触发见 ArticlesService）。
- * 未配置 GITHUB_REBUILD_TOKEN 时返回 501。
- */
 @ApiTags("运维")
 @Controller("api/rebuild")
 @UseGuards(JwtAuthGuard)

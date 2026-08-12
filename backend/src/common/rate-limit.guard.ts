@@ -16,20 +16,13 @@ interface RateEntry {
 }
 
 export interface RateLimitConfig {
-  /** 窗口内允许的最大请求数 */
   limit: number;
-  /** 窗口时长（毫秒） */
   ttlMs: number;
-  /** 自定义限流 key（默认使用 req.ip） */
   keyBy?: (req: Request) => string;
 }
 
 export const RATE_LIMIT_META = "rate_limit_config";
 
-/**
- * 在路由上声明限流规则，并挂载 RateLimitGuard。
- * 例：@RateLimit({ limit: 5, ttlMs: 600_000 })
- */
 export function RateLimit(config: RateLimitConfig) {
   return applyDecorators(
     SetMetadata(RATE_LIMIT_META, config),
@@ -37,10 +30,6 @@ export function RateLimit(config: RateLimitConfig) {
   );
 }
 
-/**
- * 内存固定窗口限流器。
- * 单实例部署够用；多实例部署时替换为 Redis 实现（key 含 ip，天然可分布式）。
- */
 @Injectable()
 export class RateLimiterService {
   private readonly hits = new Map<string, RateEntry>();
@@ -51,13 +40,11 @@ export class RateLimiterService {
     const entry = this.hits.get(key);
 
     if (!entry || now > entry.resetAt) {
-      // 惰性清理：命中时顺带清理过期项，防止内存无限增长
       if (this.hits.size >= this.MAX_ENTRIES) {
         for (const [k, e] of this.hits) {
           if (now > e.resetAt) this.hits.delete(k);
         }
         if (this.hits.size >= this.MAX_ENTRIES) {
-          // 仍超限：逐出最旧一条，保证可写入
           let oldestKey: string | undefined;
           let oldestReset = Infinity;
           for (const [k, e] of this.hits) {
@@ -78,10 +65,6 @@ export class RateLimiterService {
   }
 }
 
-/**
- * 读取 @RateLimit 元数据并执行限流。
- * key 默认取 req.ip（配合 trust proxy 配置，忽略客户端伪造的 X-Forwarded-For）。
- */
 @Injectable()
 export class RateLimitGuard implements CanActivate {
   constructor(private readonly limiter: RateLimiterService) {}

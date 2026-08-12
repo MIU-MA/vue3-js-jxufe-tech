@@ -1,15 +1,3 @@
-/**
- * 管理员密码重置脚本（一次性运维工具）。
- *
- * 用法（仓库根目录）：
- *   npm run reset:admin
- *
- * 读取 backend/.env 或环境变量中的 ADMIN_USERNAME / ADMIN_PASSWORD，
- * 将现有管理员账号的密码更新为该值（bcrypt 加盐哈希入库）。
- * 账号不存在则直接创建；已存在则仅覆盖密码，不触碰其他字段。
- *
- * 说明：仅修改环境变量不会更新已创建的旧账号，需要本脚本显式重置。
- */
 import "reflect-metadata";
 import { loadEnv } from "../common/env.config";
 import { DataSource } from "typeorm";
@@ -37,7 +25,6 @@ async function main() {
     process.exit(1);
   }
 
-  // 数据库默认位于 backend/data.db（与后端进程一致）；测试可用 DB_PATH 覆盖
   const database =
     process.env.DB_PATH || resolve(__dirname, "..", "..", "data.db");
 

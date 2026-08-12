@@ -7,13 +7,6 @@ import {
 import type { Request } from "express";
 import { ALLOWED_ORIGIN_SET } from "./origins";
 
-/**
- * 来源软校验（仅作辅助拦截，不承担认证职责）。
- *
- * - 仅当请求携带 Origin/Referer 时才校验；非浏览器客户端（curl、SSR 等）不强制。
- * - 取 URL 的 origin（scheme://host:port）做精确匹配，禁用 startsWith。
- * - 归一化失败（非法 URL）一律拒绝，宁严勿松。
- */
 @Injectable()
 export class OriginGuard implements CanActivate {
   private readonly logger = new Logger(OriginGuard.name);
@@ -36,7 +29,6 @@ export class OriginGuard implements CanActivate {
   }
 }
 
-/** 取 URL 的 scheme://host:port；解析失败返回原始串（不会命中白名单）。 */
 function normalizeOrigin(source: string): string {
   try {
     return new URL(source).origin;

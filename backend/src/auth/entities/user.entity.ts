@@ -10,16 +10,16 @@ import {
 export class User {
   @ApiProperty({ description: "用户ID", example: 1 })
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @ApiProperty({ description: "用户名", example: "admin" })
   @Column({ unique: true })
-  username: string;
+  username!: string;
 
   @Column()
-  password: string;
+  password!: string;
 
   @ApiProperty({ description: "注册时间" })
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

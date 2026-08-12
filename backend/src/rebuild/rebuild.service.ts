@@ -1,14 +1,9 @@
 import { Injectable, Logger } from "@nestjs/common";
 
-/**
- * 触发前端 SSG 重建：调用 GitHub Actions 的 workflow_dispatch（rebuild.yml）。
- * 未配置 GITHUB_REBUILD_TOKEN 时跳过（手动重建），不阻塞业务。
- */
 @Injectable()
 export class RebuildService {
   private readonly logger = new Logger(RebuildService.name);
 
-  /** 触发重建。返回是否已实际触发（无令牌时返回 false）。 */
   async trigger(reason = "cms-article-updated"): Promise<boolean> {
     const token = process.env.GITHUB_REBUILD_TOKEN;
     const repo = process.env.GITHUB_REPO || "jxufe-tech/jxufe-tech-web";

@@ -2,11 +2,7 @@ import { basename, extname, join, resolve, sep } from "path";
 import { existsSync, statSync } from "fs";
 import { NotFoundException, BadRequestException } from "@nestjs/common";
 
-/**
- * 上传根目录（backend/public）的绝对路径。
- * 基于 __dirname 而非相对 CWD，保证无论从仓库根还是 backend 启动都指向同一目录。
- * 编译后位于 backend/dist/common/，故向上两级到 backend/public。
- */
+// backend/public 的绝对路径，基于 __dirname 与启动目录无关
 export const PUBLIC_DIR = join(__dirname, "..", "..", "public");
 
 /**
@@ -17,7 +13,7 @@ export const PUBLIC_DIR = join(__dirname, "..", "..", "public");
  * - 可选：校验扩展名白名单
  * - 文件不存在时抛 NotFoundException
  *
- * @param subDir 上传子目录，如 'uploads' / 'music'
+ * @param subDir 上传子目录，如 'uploads'
  * @param filename 用户传入的文件名（来自 URL 参数，不可信）
  * @param allowedExts 允许的扩展名白名单（小写，含点），如 ['.jpg', '.png']
  */

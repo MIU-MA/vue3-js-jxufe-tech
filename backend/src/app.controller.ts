@@ -16,7 +16,6 @@ export class AppController {
     return g.__openapi_document;
   }
 
-  /** 健康检查：供负载均衡 / 监控探活 */
   @Get("api/health")
   getHealth() {
     return {

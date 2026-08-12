@@ -1,8 +1,4 @@
-/**
- * 允许的来源白名单。
- * 供 CORS 配置与 OriginGuard 共用，必须精确匹配（禁止 startsWith，
- * 防止 攻击者用 https://jxufe-tech.top.evil.com 之类前缀绕过）。
- */
+// CORS 与 OriginGuard 共用；精确匹配，禁止 startsWith（防止前缀伪造绕过）
 export const ALLOWED_ORIGINS: readonly string[] = [
   "https://www.jxufe-tech.top",
   "https://jxufe-tech.top",

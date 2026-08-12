@@ -8,7 +8,6 @@ export interface ChatMessage {
   content: string;
 }
 
-/** System Prompt 只存在于后端，客户端无法提交 system 角色。 */
 export const SYSTEM_PROMPT = `你是"数智技术协会"的 AI 助手。
 协会隶属于江西财经大学信息管理与数学学院，专注于数据科学、人工智能和项目开发实践。
 
@@ -32,18 +31,11 @@ export const SYSTEM_PROMPT = `你是"数智技术协会"的 AI 助手。
 5. 回复简洁有力，不要长篇大论（控制在 100 字以内）
 6. 涉及协会专业问题时，体现技术社团的专业素养`;
 
-/** 每条消息最长字符数（前端 DTO 已限制 2000，后端再兜底） */
 const MAX_MESSAGE_CHARS = 2000;
-/** 上下文最多保留的轮次（含本次） */
 const MAX_HISTORY_TURNS = 10;
-/** 组装后整个上下文（不含 system）的总字符上限，超出裁旧 */
 const MAX_CONTEXT_CHARS = 12_000;
 
-/**
- * 读取 .env 文件，但**不覆盖**已存在的 process.env 值。
- * 生产环境应使用真实环境变量/密钥注入；.env 只是本地开发便捷回退。
- * 这里不再用 `{...process.env, ...file}` 的合并顺序，避免文件覆盖环境变量。
- */
+// 已存在的环境变量优先，.env 只回填缺失项（避免文件覆盖真实密钥）
 function loadEnvFile(): Record<string, string> {
   const envPath = resolve(__dirname, "../../.env");
   const result: Record<string, string> = {};
@@ -56,7 +48,6 @@ function loadEnvFile(): Record<string, string> {
       if (eqIdx === -1) continue;
       const key = trimmed.slice(0, eqIdx).trim();
       const value = trimmed.slice(eqIdx + 1).trim();
-      // 已存在的环境变量优先，.env 只回填缺失项
       if (!(key in process.env)) {
         result[key] = value;
       }
@@ -137,7 +128,6 @@ export class ChatService {
     }
   }
 
-  /** 追加本次输入，返回组装好的 API 消息（system + 历史）。 */
   appendMessage(token: string, message: string): ChatMessage[] {
     let history = this.sessions.get(token);
     if (!history) {
@@ -149,10 +139,8 @@ export class ChatService {
       content: message.slice(0, MAX_MESSAGE_CHARS),
     });
 
-    // 只保留最近 MAX_HISTORY_TURNS 轮
     const recent = history.slice(-MAX_HISTORY_TURNS);
 
-    // 总字符上限，超出则继续裁旧
     let total = recent.reduce((sum, m) => sum + m.content.length, 0);
     while (recent.length > 1 && total > MAX_CONTEXT_CHARS) {
       total -= recent[0].content.length;
@@ -163,7 +151,6 @@ export class ChatService {
     return [{ role: "system", content: SYSTEM_PROMPT }, ...recent];
   }
 
-  /** 记录一次 AI 回复（供后续上下文使用）。 */
   recordAssistantReply(token: string, content: string): void {
     if (!content) return;
     const history = this.sessions.get(token) ?? [];
@@ -174,7 +161,6 @@ export class ChatService {
     this.sessions.set(token, history.slice(-MAX_HISTORY_TURNS));
 
     if (this.sessions.size > this.MAX_SESSIONS) {
-      // 简单淘汰：清掉最早的 1/4
       const keys = [...this.sessions.keys()];
       for (const k of keys.slice(0, Math.floor(this.MAX_SESSIONS / 4))) {
         this.sessions.delete(k);
@@ -182,12 +168,10 @@ export class ChatService {
     }
   }
 
-  /** 清空会话历史（"新对话"）。 */
   resetSession(token: string): void {
     this.sessions.delete(token);
   }
 
-  /** 单次对话：组装消息 → 调用 DeepSeek → 返回 SSE 流。 */
   async chat(
     message: string,
     token: string,
@@ -200,7 +184,7 @@ export class ChatService {
       messages,
       stream: true,
       temperature: 0.8,
-      max_tokens: 1024, // 从 4096 降到 1024，控制单次调用费用
+      max_tokens: 1024, // 控制单次调用费用
       stream_options: { include_usage: true }, // 从流末尾取 usage 计入预算
     };
 
@@ -234,7 +218,6 @@ export class ChatService {
         }
 
         this.logger.log("DeepSeek 流式响应已建立");
-        // 包一层变换流：透传数据并捕获流末尾的 usage
         return this.withUsageCapture(response.body!, onUsage);
       } catch (err) {
         lastError = err as Error;
@@ -265,10 +248,6 @@ export class ChatService {
     throw lastError ?? new Error("未知错误");
   }
 
-  /**
-   * 包装 DeepSeek 的原始 SSE 流，透传数据，同时从流末尾的 usage chunk 提取用量。
-   * usage 通过回调交给控制器登记到预算。
-   */
   private withUsageCapture(
     source: ReadableStream<Uint8Array>,
     onUsage?: (u: TokenUsage) => void,
@@ -311,11 +290,10 @@ export class ChatService {
                   };
                 }
               } catch {
-                /* 忽略非 JSON 行 */
+                /* 非 JSON 行，忽略 */
               }
             }
 
-            // 透传原始字节（保持 SSE 流不变）
             controller.enqueue(value);
           }
         } catch (err) {
