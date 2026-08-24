@@ -42,3 +42,14 @@ jobs:
           source: "frontend/dist/**"
           strip_components: 2
           overwrite: true
+
+      - name: Prune stale frontend assets
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /www/wwwroot/jxufe-tech/frontend/assets
+            echo "清理 30 分钟前的旧 assets（本次刚上传的不在列）"
+            find . -maxdepth 1 -type f -mmin +30 -print -delete

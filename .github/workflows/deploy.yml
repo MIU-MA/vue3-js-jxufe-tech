@@ -89,6 +89,19 @@ jobs:
           strip_components: 2
           overwrite: true
 
+      # scp 只覆盖同名文件，历史 hash 命名的 chunk 会无限累积，这里清掉旧构建产物。
+      # 只删 assets/（构建生成），不动根目录的用户数据；find 先打印再删，可审计。
+      - name: Prune stale frontend assets
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /www/wwwroot/jxufe-tech/frontend/assets
+            echo "清理 30 分钟前的旧 assets（本次刚上传的不在列）"
+            find . -maxdepth 1 -type f -mmin +30 -print -delete
+
       - name: Deploy Backend Dist to Server
         uses: appleboy/scp-action@v0.1.7
         with:
