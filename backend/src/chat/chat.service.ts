@@ -1,6 +1,4 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import type { TokenUsage } from "./ai-budget.service";
 
 export interface ChatMessage {
@@ -34,31 +32,6 @@ export const SYSTEM_PROMPT = `你是"数智技术协会"的 AI 助手。
 const MAX_MESSAGE_CHARS = 2000;
 const MAX_HISTORY_TURNS = 10;
 const MAX_CONTEXT_CHARS = 12_000;
-
-// 已存在的环境变量优先，.env 只回填缺失项（避免文件覆盖真实密钥）
-function loadEnvFile(): Record<string, string> {
-  const envPath = resolve(__dirname, "../../.env");
-  const result: Record<string, string> = {};
-  try {
-    const content = readFileSync(envPath, "utf-8");
-    for (const line of content.split("\n")) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith("#")) continue;
-      const eqIdx = trimmed.indexOf("=");
-      if (eqIdx === -1) continue;
-      const key = trimmed.slice(0, eqIdx).trim();
-      const value = trimmed.slice(eqIdx + 1).trim();
-      if (!(key in process.env)) {
-        result[key] = value;
-      }
-    }
-    return result;
-  } catch {
-    return {};
-  }
-}
-
-const env = { ...process.env, ...loadEnvFile() };
 
 const API_URL = "https://api.deepseek.com/v1/chat/completions";
 const REQUEST_TIMEOUT_MS = 30_000;
@@ -116,7 +89,7 @@ export class ChatService {
   private readonly MAX_SESSIONS = 2000;
 
   constructor() {
-    this.apiKey = env.DEEPSEEK_API_KEY || "";
+    this.apiKey = process.env.DEEPSEEK_API_KEY || "";
     if (!this.apiKey) {
       this.logger.warn(
         "DEEPSEEK_API_KEY 未设置！聊天功能将不可用。请在 backend/.env 中配置 DEEPSEEK_API_KEY",

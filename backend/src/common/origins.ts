@@ -2,8 +2,6 @@
 export const ALLOWED_ORIGINS: readonly string[] = [
   "https://www.jxufe-tech.top",
   "https://jxufe-tech.top",
-  "https://api.jxufe-tech.top",
-  "https://miuma-blog.vercel.app",
   "http://localhost:5173",
   "http://localhost:3000",
 ];
