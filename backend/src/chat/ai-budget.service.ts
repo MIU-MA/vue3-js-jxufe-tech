@@ -16,11 +16,15 @@ export interface BudgetStatus {
   tokenBudget: number;
 }
 
+const BUDGET_TIME_ZONE = "Asia/Shanghai";
+
 export function todayKey(d = new Date()): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: BUDGET_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
 }
 
 @Injectable()
